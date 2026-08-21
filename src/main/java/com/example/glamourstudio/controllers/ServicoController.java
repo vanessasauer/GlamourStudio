@@ -1,35 +1,45 @@
 package com.example.glamourstudio.controllers;
 
+
+import com.example.glamourstudio.entities.Servico;
 import com.example.glamourstudio.entities.Usuario;
+import com.example.glamourstudio.repository.ServicoRepository;
 import com.example.glamourstudio.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping("/servico")
+public class ServicoController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private ServicoRepository servicoRepository;
 
     @GetMapping
     public ResponseEntity<?> listarTodos(){
 
-        return ResponseEntity.ok(usuarioRepository.findAll());
+        return ResponseEntity.ok(servicoRepository.findAll());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario){
+    public ResponseEntity<Servico> criar(@RequestBody Servico servico){
 
-        var usuarioBanco = usuarioRepository.save(usuario);
-        return ResponseEntity.ok(usuarioBanco);
+        var servicoBanco = servicoRepository.save(servico);
+        return ResponseEntity.ok(servicoBanco);
 
     }
+
+
+
+
+
+
+
+
+
 
 
 

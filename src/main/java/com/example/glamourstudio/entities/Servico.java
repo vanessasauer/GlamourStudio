@@ -1,5 +1,6 @@
 package com.example.glamourstudio.entities;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,12 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Servico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +23,10 @@ public class Usuario {
 
     public String nome;
 
-    public String cpf;
+    public String descricao;
 
-    public String senha;
+    public BigDecimal valor;
 
-    public String email;
+    public Integer duracaoMinutos;
 
 }

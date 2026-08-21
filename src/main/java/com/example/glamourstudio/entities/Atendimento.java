@@ -8,23 +8,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Atendimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public String nome;
+    public String cliente;
 
-    public String cpf;
+    public String profissional;
 
-    public String senha;
+    public LocalDateTime dataHora;
 
-    public String email;
+    public String servico;
+
+    public String status;
+
 
 }
