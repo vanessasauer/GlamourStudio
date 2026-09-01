@@ -18,15 +18,17 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    public String nome;
+    private String nome;
 
-    public LocalDate dataNascimento;
+    private LocalDate dataNascimento;
 
-    public String email;
+    private String email;
 
-    public String telefone;
+    private String telefone;
+
+    private EnumStatusCliente statusCliente = EnumStatusCliente.ATIVO;
 
 
 }

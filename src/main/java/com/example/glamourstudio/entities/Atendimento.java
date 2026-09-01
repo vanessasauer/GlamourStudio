@@ -19,17 +19,19 @@ public class Atendimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    public String cliente;
+    private String cliente;
 
-    public String profissional;
+    private String profissional;
 
-    public LocalDateTime dataHora;
+    private LocalDateTime dataHora;
 
-    public String servico;
+    private String servico;
 
-    public String status;
+    private String situacaoAtendimento;
+
+    private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.ATIVO;
 
 
 }

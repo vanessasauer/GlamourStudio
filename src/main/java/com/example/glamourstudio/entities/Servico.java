@@ -15,18 +15,20 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Servico {
+public class Servico{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    public String nome;
+    private String nome;
 
-    public String descricao;
+    private String descricao;
 
-    public BigDecimal valor;
+    private BigDecimal valor;
 
-    public Integer duracaoMinutos;
+    private Integer duracaoMinutos;
+
+    private EnumStatusServico statusServico = EnumStatusServico.ATIVO;
 
 }
