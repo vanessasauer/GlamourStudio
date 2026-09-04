@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
-
-    Optional<List<Servico>> findByStatusNot(EnumStatusServico statusServico);
+    
 }
