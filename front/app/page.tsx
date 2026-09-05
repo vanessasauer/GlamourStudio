@@ -1,4 +1,6 @@
-'use client';
+'use client'
+
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -373,8 +375,8 @@ export default function Page() {
           </a>
 
           <div className="auth-actions">
-            <a href="#login" className="btn-link">Entrar</a>
-            <a href="#cadastro" className="btn btn-primary">Criar Conta</a>
+            <Link href="/login" className="btn-link">Entrar</Link>
+
           </div>
         </div>
       </header>

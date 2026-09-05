@@ -1,5 +1,10 @@
 export default function SistemaLayout({children}){
-    return (<>
-    {children}
-    </>);
+    return (
+
+   <div className="flex">
+   {children}
+   </div>
+   
+
+    );
 }
