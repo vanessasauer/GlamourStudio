@@ -77,7 +77,6 @@ public class AtendimentoController {
                 atendimentoBanco.setProfissional(atendimento.getProfissional());
                 atendimentoBanco.setDataHora(atendimento.getDataHora());
                 atendimentoBanco.setServico(atendimento.getServico());
-                atendimentoBanco.setSituacaoAtendimento(atendimento.getSituacaoAtendimento());
                 atendimentoRepository.save(atendimentoBanco);
                 return ResponseEntity.ok().build();
             }
@@ -93,7 +92,7 @@ public class AtendimentoController {
 
         Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
         if ( atendimentoBanco!=null){
-            atendimentoBanco.setStatusAtendimento(EnumStatusAtendimento.EXCLUIDO);
+            atendimentoBanco.setStatusAtendimento(EnumStatusAtendimento.CANCELADO);
             atendimentoRepository.save(atendimentoBanco);
             return ResponseEntity.ok().build();
         }

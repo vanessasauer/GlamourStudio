@@ -3,6 +3,7 @@ import Link from "next/link";
 export default function Atendimento(){
 
     return(
+
         <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
 
             <div className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
@@ -31,7 +32,23 @@ export default function Atendimento(){
                             <tr>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Nome
+                                    Cliente
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Serviço
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Data e Hora
+                                </th>   
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Profissional
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Status
                                 </th>
 
                             </tr>
@@ -43,7 +60,25 @@ export default function Atendimento(){
                             <tr className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Atendimento
+                                    Maria
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    Escova modeladora
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    10/09/2026 - 14:00
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    Vanessa
+                                </td>
+
+                                <td className="px-6 py-4 text-sm">
+                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+                                        Agendado
+                                    </span>
                                 </td>
 
                             </tr>
@@ -57,6 +92,7 @@ export default function Atendimento(){
             </div>
 
         </div>
+
     )
 
 }

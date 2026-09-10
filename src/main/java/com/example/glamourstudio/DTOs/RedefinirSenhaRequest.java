@@ -1,4 +1,4 @@
 package com.example.glamourstudio.DTOs;
 
-public record RedefenirSenhaRequest() {
+public record RedefinirSenhaRequest() {
 }

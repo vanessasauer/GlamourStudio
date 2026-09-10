@@ -34,6 +34,10 @@ export default function Cliente(){
                                     Nome
                                 </th>
 
+                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Status
+                                </th>
+
                             </tr>
 
                         </thead>
@@ -45,6 +49,13 @@ export default function Cliente(){
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     Vanessa
                                 </td>
+
+                                <td className="px-6 py-4 text-sm">
+                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                                        Ativo
+                                    </span>
+                                </td>
+
 
                             </tr>
 

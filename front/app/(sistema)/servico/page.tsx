@@ -34,6 +34,14 @@ export default function Servico(){
                                     Nome
                                 </th>
 
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Valor
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Status
+                                </th>
+
                             </tr>
 
                         </thead>
@@ -44,6 +52,16 @@ export default function Servico(){
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     Escova modeladora
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    R$50,00
+                                </td>
+
+                                <td className="px-6 py-4 text-sm">
+                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                                        Ativo
+                                    </span>
                                 </td>
 
                             </tr>

@@ -29,9 +29,7 @@ public class Atendimento {
 
     private String servico;
 
-    private String situacaoAtendimento;
-
-    private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.ATIVO;
+    private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.AGENDADO;
 
 
 }
