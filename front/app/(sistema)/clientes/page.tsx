@@ -1,19 +1,18 @@
 import Link from "next/link";
 
-export default function Atendimento(){
+export default function Clientes(){
 
     return(
-
         <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
 
             <div className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
 
                 <h1 className="text-3xl font-semibold text-[#5C5145]">
-                    Gestão de atendimentos
+                    Gestão de clientes
                 </h1>
 
                 <Link 
-                    href="/atendimentos/novo"
+                    href="/clientes/novo"
                     className="rounded-lg bg-[#B9A58D] px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-[#A58F76]"
                 >
                     Novo
@@ -36,18 +35,10 @@ export default function Atendimento(){
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Serviço
+                                    Telefone
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Data e Hora
-                                </th>   
-
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Profissional
-                                </th>
-
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Status
                                 </th>
 
@@ -60,26 +51,20 @@ export default function Atendimento(){
                             <tr className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Maria
-                                </td>
-
-                                <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Escova modeladora
-                                </td>
-
-                                <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    10/09/2026 - 14:00
-                                </td>
-
-                                <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     Vanessa
                                 </td>
 
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    47891147568
+                                </td>
+                                
+
                                 <td className="px-6 py-4 text-sm">
-                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
-                                        Agendado
+                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                                        Ativo
                                     </span>
                                 </td>
+
 
                             </tr>
 
@@ -92,7 +77,6 @@ export default function Atendimento(){
             </div>
 
         </div>
-
     )
 
 }
