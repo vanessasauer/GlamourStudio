@@ -1,6 +1,30 @@
+"use client"
+import { Cliente } from "@/app/types/cliente";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Clientes(){
+
+
+const [clientes, setClientes] = useState<Cliente[]>([]);
+
+useEffect( ()=>{
+    carregarDados();
+},[]);
+
+
+    const carregarDados = async () => {
+        
+        try{
+        const dados = await axios.get<Cliente[]>("http://localhost:8080/cliente");
+
+        setClientes(dados.data)
+        
+    } catch (error){
+        alert("Erro ao carregar dados")
+    }
+    }
 
     return(
         <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
@@ -31,14 +55,23 @@ export default function Clientes(){
                             <tr>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Cliente
+                                    Código
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Telefone
+                                    Cliente
                                 </th>
 
                                  <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Data de nascimento
+                                </th>
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    E-mail
+                                </th>
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Telefone
+                                </th>
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Status
                                 </th>
 
@@ -48,25 +81,42 @@ export default function Clientes(){
 
                         <tbody>
 
-                            <tr className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
+                             {clientes.map((cliente)=>( 
+
+                            <tr key={cliente.id}className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Vanessa
+                                    {cliente.id}
                                 </td>
-
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    47891147568
+                                    {cliente.nome}
                                 </td>
-                                
-
-                                <td className="px-6 py-4 text-sm">
-                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                                        Ativo
-                                    </span>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {cliente.dataNascimento}
                                 </td>
-
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {cliente.email}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {cliente.telefone}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {cliente.status}
+                                </td>
 
                             </tr>
+                           ))}
+
+                           {clientes.length ===0 &&
+                           (
+                            <tr>
+                                <td colSpan={6} className="px-6 py-12 text-center text-[#6B6054] ">
+                                    Nenhum cliente encontrado!
+                                </td>
+                            </tr>
+                           )
+
+                           }
 
                         </tbody>
 

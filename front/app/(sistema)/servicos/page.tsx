@@ -1,6 +1,29 @@
+"use client"
+import { Servico } from "@/app/types/servico";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Servicos(){
+
+    const [servicos, setServicos] = useState<Servico[]>([]);
+
+useEffect( ()=>{
+    carregarDados();
+},[]);
+
+
+    const carregarDados = async () => {
+        
+        try{
+        const dados = await axios.get<Servico[]>("http://localhost:8080/servico");
+
+        setServicos(dados.data)
+        
+    } catch (error){
+        alert("Erro ao carregar dados")
+    }
+}
 
     return(
         <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
@@ -29,13 +52,24 @@ export default function Servicos(){
                         <thead className="bg-[#EFE7DC]">
 
                             <tr>
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Código
+                                </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Nome
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Descrição
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Valor
+                                </th>
+
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Duração
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
@@ -48,24 +82,42 @@ export default function Servicos(){
 
                         <tbody>
 
-                            <tr className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
+                           {servicos.map((servico)=>( 
+
+                            <tr key={servico.id}className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Escova modeladora
+                                    {servico.id}
                                 </td>
-
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    R$50,00
+                                    {servico.nome}
                                 </td>
-
-                                <td className="px-6 py-4 text-sm">
-                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                                        Ativo
-                                    </span>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {servico.descricao}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {servico.valor}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {servico.duracaoMinutos}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {servico.status}
                                 </td>
 
                             </tr>
+                           ))}
 
+                           {servicos.length ===0 &&
+                           (
+                            <tr>
+                                <td colSpan={6} className="px-6 py-12 text-center text-[#6B6054] ">
+                                    Nenhum serviço encontrado!
+                                </td>
+                            </tr>
+                           )
+
+                           }
                         </tbody>
 
                     </table>

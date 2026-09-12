@@ -1,6 +1,29 @@
+"use client"
+import { Atendimento } from "@/app/types/atendimento";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Atendimentos(){
+
+    const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);
+
+useEffect( ()=>{
+    carregarDados();
+},[]);
+
+
+    const carregarDados = async () => {
+        
+        try{
+        const dados = await axios.get<Atendimento[]>("http://localhost:8080/atendimento");
+
+        setAtendimentos(dados.data)
+        
+    } catch (error){
+        alert("Erro ao carregar dados")
+    }
+    }
 
     return(
 
@@ -30,13 +53,16 @@ export default function Atendimentos(){
                         <thead className="bg-[#EFE7DC]">
 
                             <tr>
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                    Código
+                                </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Cliente
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Serviço
+                                    Profissional
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
@@ -44,7 +70,7 @@ export default function Atendimentos(){
                                 </th>   
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
-                                    Profissional
+                                    Serviço
                                 </th>
 
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
@@ -57,31 +83,42 @@ export default function Atendimentos(){
 
                         <tbody>
 
-                            <tr className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
+                           {atendimentos.map((atendimento)=>( 
+
+                            <tr key={atendimento.id}className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]">
 
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Maria
+                                    {atendimento.id}
                                 </td>
-
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Escova modeladora
+                                    {atendimento.cliente}
                                 </td>
-
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    10/09/2026 - 14:00
+                                    {atendimento.profissional}
                                 </td>
-
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
-                                    Vanessa
+                                    {atendimento.dataHora}
                                 </td>
-
-                                <td className="px-6 py-4 text-sm">
-                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
-                                        Agendado
-                                    </span>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {atendimento.servico}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    {atendimento.status}
                                 </td>
 
                             </tr>
+                           ))}
+
+                           {atendimentos.length ===0 &&
+                           (
+                            <tr>
+                                <td colSpan={6} className="px-6 py-12 text-center text-[#6B6054] ">
+                                    Nenhum atendimento encontrado!
+                                </td>
+                            </tr>
+                           )
+
+                           }
 
                         </tbody>
 
