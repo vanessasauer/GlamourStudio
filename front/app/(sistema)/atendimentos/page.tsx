@@ -105,7 +105,10 @@ useEffect( ()=>{
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     {atendimento.status}
                                 </td>
-
+                                
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                        <Link href={`/atendimentos/${atendimento.id}/editar`}>Editar</Link>
+                                    </td>
                             </tr>
                            ))}
 

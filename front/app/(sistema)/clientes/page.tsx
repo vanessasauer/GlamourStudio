@@ -74,6 +74,7 @@ useEffect( ()=>{
                                 <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
                                     Status
                                 </th>
+                                
 
                             </tr>
 
@@ -103,6 +104,10 @@ useEffect( ()=>{
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     {cliente.status}
                                 </td>
+
+                                <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                        <Link href={`/clientes/${cliente.id}/editar`}>Editar</Link>
+                                    </td>
 
                             </tr>
                            ))}

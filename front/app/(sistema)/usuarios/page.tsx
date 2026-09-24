@@ -27,7 +27,7 @@ useEffect( ()=>{
 }
 
     return (
-        <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
+        <div className="w-full bg-slate-50 p-6 md:p-8 font-sans">
 
             <div className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
 
@@ -71,6 +71,10 @@ useEffect( ()=>{
                                     Status
                                 </th>
 
+                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                        Ações
+                                    </th>
+
                             </tr>
 
                         </thead>
@@ -96,6 +100,9 @@ useEffect( ()=>{
                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
                                     {usuario.status}
                                 </td>
+                                 <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                        <Link href={`/usuarios/${usuario.id}/editar`}>Editar</Link>
+                                    </td>
 
                             </tr>
                            ))}
