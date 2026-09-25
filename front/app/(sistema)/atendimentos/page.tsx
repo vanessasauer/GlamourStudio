@@ -27,7 +27,7 @@ useEffect( ()=>{
 
     return(
 
-        <div className="min-h-screen bg-[#F8F5F0] px-6 py-10">
+        <div className="w-full bg-[#F8F5F0] p-6 md:p-8 font-sans">
 
             <div className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
 
@@ -115,7 +115,7 @@ useEffect( ()=>{
                            {atendimentos.length ===0 &&
                            (
                             <tr>
-                                <td colSpan={6} className="px-6 py-12 text-center text-[#6B6054] ">
+                                <td colSpan={5} className="px-6 py-12 text-center text-[#6B6054] ">
                                     Nenhum atendimento encontrado!
                                 </td>
                             </tr>

@@ -1,10 +1,69 @@
-import Link from "next/link";
+'use client'
 
-export default function UsuarioForm() {
+import { Usuario, UsuarioFormProps } from "@/app/types/usuario";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function UsuarioForm({usuarioExistente}:UsuarioFormProps) {
+    const router = useRouter();
+
+const  [usuario, setUsuario] = useState<Usuario>(
+    usuarioExistente ||
+    new Usuario(null,"","","ATIVO","","")
+);
+
+const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha', valor:string) =>{
+    setUsuario(
+        valorAnterior => 
+        new Usuario(
+
+            valorAnterior.id,
+            campo === 'nome' ? valor : valorAnterior.nome,
+            campo === 'email' ? valor : valorAnterior.email,
+            valorAnterior.status,
+            campo === 'cpf' ? valor : valorAnterior.cpf,
+            campo === 'senha' ? valor : valorAnterior.senha
+            
+        )
+    )
+}
+
+   
+
+const handlerSalvar = async (formdata : FormData) =>{
+
+    if(usuarioExistente){
+        var dadosRetorno = await axios.put<number>('http://localhost:8080/usuarios'+usuario.id, usuario);
+
+        if(dadosRetorno.status==200){
+            alert("Usuário foi salvo com sucesso!");
+        } else {
+            alert(dadosRetorno.data);
+    
+            return;
+        }
+
+    }else{
+    var dadosRetorno = await axios.post<number>('http://localhost:8080/usuarios',usuario)
+
+    if(dadosRetorno.status==200){
+        alert("Usuário foi salvo com sucesso!");
+    } else {
+        alert(dadosRetorno.data);
+
+        return;
+    }
+}
+
+    router.push("/usuarios");
+
+    }
 
     return (
 
-        <form className="space-y-6">
+        <form action = {handlerSalvar} className="space-y-6">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -16,6 +75,10 @@ export default function UsuarioForm() {
 
                     <input
                         name="nome"
+                        value = {usuario.nome}
+                        required 
+                        onChange={(e)=> handlerChange('nome', e.target.value)}
+                        placeholder="Maria da Silva"
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -30,6 +93,9 @@ export default function UsuarioForm() {
 
                     <input
                         name="CPF"
+                        value = {usuario.cpf}
+                        placeholder="000.000.000-00"
+                        onChange={(e)=> handlerChange('cpf', e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -44,6 +110,9 @@ export default function UsuarioForm() {
 
                     <input
                         name="email"
+                        value = {usuario.email}
+                        placeholder="EmaildaMaria@silva.com.br"
+                        onChange={(e)=> handlerChange('email', e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -58,7 +127,10 @@ export default function UsuarioForm() {
 
                     <input
                         name="Senha"
+                        value = {usuario.senha}
                         type="password"
+                        placeholder="************"
+                        onChange={(e)=> handlerChange('senha', e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
