@@ -73,6 +73,7 @@ export default function Login(){
                         <input 
                             name="senha"
                             placeholder="Digite sua senha"
+                            type="password"
                             className="w-full rounded-lg border border-[#D8CBBB] bg-[#FAF7F2] px-4 py-3 text-[#4F463D] placeholder:text-[#B8ADA2] outline-none transition focus:border-[#B9A58D] focus:ring-2 focus:ring-[#D8CBBB]/50"
                         />
 

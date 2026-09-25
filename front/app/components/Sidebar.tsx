@@ -24,31 +24,32 @@ export default function Sidebar(){
                 </Link>
 
                 <Link 
-                    href="/usuarios" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Usuários
-                </Link>
-
-                    <Link 
-                        href="/servicos" 
-                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                    >
-                        Serviços
-                    </Link>
-
-                    <Link 
-                    href="/clientes" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Clientes
-                </Link>
-                <Link 
                     href="/atendimentos" 
                     className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
                 >
                     Atendimentos
                 </Link>
+
+                <Link 
+                    href="/clientes" 
+                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                >
+                    Clientes
+                </Link>
+
+                <Link 
+                        href="/servicos" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Serviços
+                    </Link>
+                
+                <Link 
+                    href="/usuarios" 
+                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                >
+                    Usuários
+                </Link>  
 
             </nav>
 

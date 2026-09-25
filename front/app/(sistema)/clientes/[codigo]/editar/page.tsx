@@ -1,12 +1,42 @@
+"use client"
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ClientesForm from "../../components/ClientesForm";
+import { useEffect, useState } from "react";
+import { Cliente } from "@/app/types/cliente";
+import axios from "axios";
 
 export default function EditarCliente(){
 
     const parametro = useParams();
 
     const codigo = Number(parametro.codigo);
+
+    const [cliente, setCliente] = useState<Cliente|null>(null)
+
+    const router = useRouter();
+
+    useEffect(()=>{
+
+        buscarDados();
+
+    },[]);
+
+    const buscarDados = async() =>{
+
+        const valorClienteBack = await axios.get<Cliente>('http://localhost:8080/cliente/'+codigo);
+
+        if(valorClienteBack.status==200){
+            setCliente(valorClienteBack.data);
+        }else{
+            router.push("/clientes")
+        }
+
+    
+    }
+
+
+    if(!cliente) return(<div className="p-8"> Carregando Dados ... </div>)
 
     return(
 
@@ -31,7 +61,7 @@ export default function EditarCliente(){
                 </div>
 
                 <Link
-                    href="/clientes"
+                    href="/usuarios"
                     className="inline-flex items-center justify-center text-sm font-medium text-[#6B6054] hover:text-[#4F463D] bg-[#EFE7DC] hover:bg-[#E8DED0] border border-[#D8CBBB] px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm w-full sm:w-auto"
                 >
                     &larr; Voltar para Listagem
@@ -41,7 +71,7 @@ export default function EditarCliente(){
 
             <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
 
-                <ClientesForm/>
+                <ClientesForm clienteExistente={cliente}/>
 
             </div>
 

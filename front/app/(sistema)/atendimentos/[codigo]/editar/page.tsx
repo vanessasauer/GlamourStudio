@@ -1,12 +1,42 @@
+"use client"
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import AtendimentosForm from "../../components/AtendimentosForm";
+import { useEffect, useState } from "react";
+import { Atendimento } from "@/app/types/atendimento";
+import axios from "axios";
 
 export default function EditarAtendimento(){
 
     const parametro = useParams();
 
     const codigo = Number(parametro.codigo);
+
+    const [atendimento, setAtendimento] = useState<Atendimento|null>(null)
+
+    const router = useRouter();
+
+    useEffect(()=>{
+
+        buscarDados();
+
+    },[]);
+
+    const buscarDados = async() =>{
+
+        const valorAtendimentoBack = await axios.get<Atendimento>('http://localhost:8080/atendimento/'+codigo);
+
+        if(valorAtendimentoBack.status==200){
+            setAtendimento(valorAtendimentoBack.data);
+        }else{
+            router.push("/atendimentos")
+        }
+
+    
+    }
+
+
+    if(!atendimento) return(<div className="p-8"> Carregando Dados ... </div>)
 
     return(
 
@@ -41,7 +71,7 @@ export default function EditarAtendimento(){
 
             <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
 
-                <AtendimentosForm/>
+                <AtendimentosForm atendimentoExistente={atendimento}/>
 
             </div>
 

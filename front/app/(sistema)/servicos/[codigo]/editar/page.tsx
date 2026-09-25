@@ -1,12 +1,42 @@
+"use client"
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ServicoForm from "../../components/ServicoForm";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Servico } from "@/app/types/servico";
 
 export default function EditarServico(){
 
     const parametro = useParams();
 
     const codigo = Number(parametro.codigo);
+
+    const [servico, setServico] = useState<Servico|null>(null)
+
+    const router = useRouter();
+
+    useEffect(()=>{
+
+        buscarDados();
+
+    },[]);
+
+    const buscarDados = async() =>{
+
+        const valorServicoBack = await axios.get<Servico>('http://localhost:8080/servico/'+codigo);
+
+        if(valorServicoBack.status==200){
+            setServico(valorServicoBack.data);
+        }else{
+            router.push("/servicos")
+        }
+
+    
+    }
+
+
+    if(!servico) return(<div className="p-8"> Carregando Dados ... </div>)
 
     return(
 
@@ -41,7 +71,7 @@ export default function EditarServico(){
 
             <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
 
-                <ServicoForm/>
+                <ServicoForm servicoExistente={servico}/>
 
             </div>
 

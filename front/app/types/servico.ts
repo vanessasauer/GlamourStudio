@@ -8,3 +8,7 @@ export class Servico{
         public status:string
     ){}
 }
+
+export interface ServicoFormProps{
+    servicoExistente?:Servico
+}
