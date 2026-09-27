@@ -31,6 +31,8 @@ public class AtendimentoController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Método de consulta de atendimentos por ID",
+            description = "Método responsável em efetuar a consulta dos atendimentos por ID.")
     public ResponseEntity<Atendimento> buscarPorId(@PathVariable Long id){
         Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
         if(atendimentoBanco != null){
@@ -53,6 +55,8 @@ public class AtendimentoController {
 
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Método de atualização de status do atendimento por ID.",
+            description = "Método responsável por atualizar o status do atendimento pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
         Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null); //vai trazer o estado atual do id do atendimento no banco
@@ -66,6 +70,8 @@ public class AtendimentoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Método de atualizar as informações de um atendimento por ID.",
+            description = "Método responsável por atualizar os dados de um atendimento existente pelo ID.")
     public ResponseEntity<Atendimento> atualizar(@PathVariable Long id, @RequestBody Atendimento atendimento ){
 
         try {
@@ -88,6 +94,8 @@ public class AtendimentoController {
     }
 
     @DeleteMapping("/{id}/excluir")
+    @Operation(summary = "Método de excluir os atendimentos filtrando pelo seu ID.",
+            description = "Método responsável por excluir um atendimento existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
         Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);

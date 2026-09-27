@@ -30,6 +30,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Método de consulta de usuários por ID",
+            description = "Método responsável em efetuar a consulta dos usuários filtrando por ID.")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id){
         Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
         if(usuarioBanco != null){
@@ -51,6 +53,8 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Método de atualização de status do usuário por ID.",
+            description = "Método responsável por atualizar o status do usuário pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
         Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null); //vai trazer o estado atual do id do usuário no banco
@@ -64,6 +68,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Método de atualizar as informações de um usuário por ID.",
+            description = "Método responsável por atualizar os dados de um usuário existente filtrando pelo seu ID.")
     public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario usuario ){
 
         try {
@@ -86,6 +92,8 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}/excluir")
+    @Operation(summary = "Método de excluir os usuário filtrando pelo seu ID.",
+            description = "Método responsável por excluir um usuário existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
         Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);

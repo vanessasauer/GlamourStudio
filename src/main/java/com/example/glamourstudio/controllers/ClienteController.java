@@ -28,6 +28,8 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Método de consulta de clientes por ID",
+            description = "Método responsável em efetuar a consulta dos clientes filtrando por ID.")
     public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id){
         Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
         if(clienteBanco != null){
@@ -49,6 +51,8 @@ public class ClienteController {
     }
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Método de atualização de status do cliente por ID.",
+            description = "Método responsável por atualizar o status do cliente pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
         Cliente clienteBanco = clienteRepository.findById(id).orElse(null); //vai trazer o estado atual do id do cliente no banco
@@ -62,6 +66,8 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Método de atualizar as informações de um cliente por ID.",
+            description = "Método responsável por atualizar os dados de um cliente existente filtrando pelo seu ID.")
     public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody Cliente cliente ){
 
         try {
@@ -84,6 +90,8 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}/excluir")
+    @Operation(summary = "Método de excluir os clientes filtrando pelo seu ID.",
+            description = "Método responsável por excluir um cliente existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
         Cliente clienteBanco = clienteRepository.findById(id).orElse(null);

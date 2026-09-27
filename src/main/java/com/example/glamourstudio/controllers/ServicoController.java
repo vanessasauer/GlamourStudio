@@ -29,6 +29,8 @@ public class ServicoController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Método de consulta de serviços por ID",
+            description = "Método responsável em efetuar a consulta dos serviços filtrando por ID.")
     public ResponseEntity<Servico> buscarPorId(@PathVariable Long id){
         Servico servicoBanco = servicoRepository.findById(id).orElse(null);
         if(servicoBanco != null){
@@ -50,6 +52,8 @@ public class ServicoController {
     }
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Método de atualização de status do serviço por ID.",
+            description = "Método responsável por atualizar o status do serviço pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
         Servico servicoBanco = servicoRepository.findById(id).orElse(null); //vai trazer o estado atual do id do serviço no banco
@@ -63,6 +67,8 @@ public class ServicoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Método de atualizar as informações de um serviço por ID.",
+            description = "Método responsável por atualizar os dados de um serviço existente filtrando pelo seu ID.")
     public ResponseEntity<Servico> atualizar(@PathVariable Long id, @RequestBody Servico servico ){
 
         try {
@@ -85,6 +91,8 @@ public class ServicoController {
     }
 
     @DeleteMapping("/{id}/excluir")
+    @Operation(summary = "Método de excluir os serviços filtrando pelo seu ID.",
+            description = "Método responsável por excluir um serviço existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
         Servico servicoBanco = servicoRepository.findById(id).orElse(null);
