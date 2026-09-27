@@ -58,13 +58,13 @@ export default function Servicos(){
 
         var novoStatus = {};
 
-        if(servico.status ==="ATIVO"){
+        if(servico.statusServico ==="ATIVO"){
 
-            novoStatus = {status:"BLOQUEADO"}
+            novoStatus = {statusServico:"INATIVO"}
 
         }else{
 
-            novoStatus = {status:"ATIVO"}
+            novoStatus = {statusServico:"ATIVO"}
 
         }
 
@@ -179,14 +179,16 @@ export default function Servicos(){
 
                                     <td className="px-6 py-4 text-sm text-[#6B6054]">
 
-                                        <span
+                                       <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
-                                                servico.status === "ATIVO"
+                                                servico.statusServico === "INATIVO"
+                                                    ? "bg-amber-50 text-amber-700"
+                                                    : servico.statusServico === "ATIVO"
                                                     ? "bg-emerald-50 text-emerald-700"
-                                                    : "bg-amber-50 text-amber-700"
+                                                    : "bg-red-50 text-red-600"
                                             }`}
                                         >
-                                            {servico.status}
+                                            {servico.statusServico}
                                         </span>
 
                                     </td>
@@ -202,31 +204,25 @@ export default function Servicos(){
                                                 Editar
                                             </Link>
 
-                                            <button
-                                                onClick={()=> handleDeletarServico(servico)}
-                                                className="inline-flex items-center justify-center rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700"
+                                            <button onClick={()=> handleDeletarServico(servico)}
+                                            className="inline-flex items-center justify-center rounded-lg border border-[#E7C9C3] bg-[#FFF7F5] px-3.5 py-2 text-sm font-medium text-[#A65F55] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FCEDEA] hover:border-[#DFAFA6] hover:text-[#8F4F46] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#F0D7D2]"
                                             >
                                                 Deletar
-                                            </button>
+                                                </button>
 
-                                            <button
-                                                onClick={()=> handleAlterarStatusServico(servico)}
-                                                className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-all duration-300 ${
-                                                    servico.status === "ATIVO"
-                                                        ? "bg-emerald-500"
-                                                        : "bg-amber-400"
-                                                }`}
-                                            >
 
-                                                <span
-                                                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${
-                                                        servico.status === "ATIVO"
-                                                            ? "translate-x-6"
-                                                            : "translate-x-1"
-                                                    }`}
-                                                ></span>
-
-                                            </button>
+                                            <button onClick={()=> handleAlterarStatusServico(servico)}
+                                     className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-all duration-300 ${
+                                        servico.statusServico === "ATIVO"
+                                           ? "bg-emerald-500": "bg-amber-400"
+                                     }`} >
+                                            <span
+                                   className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${
+                                          servico.statusServico === "ATIVO"
+                                           ? "translate-x-6" : "translate-x-1"
+                                        }`}
+                                            ></span>
+                                        </button>
 
                                         </div>
 

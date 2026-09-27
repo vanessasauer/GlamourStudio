@@ -7,7 +7,7 @@ export class Cliente{
         public dataNascimento:string,
         public email:string,
         public telefone:string,
-        public status:string
+        public statusCliente:string
 
 
     ){}

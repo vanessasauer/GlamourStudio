@@ -10,10 +10,10 @@ export default function ServicoForm({servicoExistente}:ServicoFormProps) {
 
 const  [servico, setServico] = useState<Servico>(
     servicoExistente ||
-    new Servico(null,"","",0,0,"")
+    new Servico(null,"","",0,0,"ATIVO")
 );
 
-const handlerChange = ( campo : 'nome' | 'descricao' | 'valor' | 'duracaoMinutos' | 'status', valor:string) =>{
+const handlerChange = ( campo : 'nome' | 'descricao' | 'valor' | 'duracaoMinutos', valor:string) =>{
     setServico(
         valorAnterior => 
         new Servico(
@@ -23,7 +23,7 @@ const handlerChange = ( campo : 'nome' | 'descricao' | 'valor' | 'duracaoMinutos
             campo === 'descricao' ? valor : valorAnterior.descricao,
             campo === 'valor' ? Number(valor) : valorAnterior.valor,
             campo === 'duracaoMinutos' ? Number(valor) : valorAnterior.duracaoMinutos,
-            valorAnterior.status 
+            valorAnterior.statusServico 
         )
     )
 }
@@ -33,7 +33,7 @@ const handlerChange = ( campo : 'nome' | 'descricao' | 'valor' | 'duracaoMinutos
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(servicoExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/servico'+servico.id, servico);
+        var dadosRetorno = await axios.put<number>('http://localhost:8080/servico/'+servico.id, servico);
 
         if(dadosRetorno.status==200){
             alert("Serviço foi salvo com sucesso!");

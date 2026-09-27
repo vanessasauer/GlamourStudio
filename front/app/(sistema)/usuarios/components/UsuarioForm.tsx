@@ -35,7 +35,7 @@ const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha', valor:string
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(usuarioExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/usuarios'+usuario.id, usuario);
+        var dadosRetorno = await axios.put<number>('http://localhost:8080/usuarios/'+usuario.id, usuario);
 
         if(dadosRetorno.status==200){
             alert("Usuário foi salvo com sucesso!");

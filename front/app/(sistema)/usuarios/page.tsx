@@ -73,7 +73,7 @@ export default function Usuarios(){
 
         if(dadosRetorno.status==200){
 
-            alert("Atulizado status com sucesso!");
+            alert("Status atualizado com sucesso!");
 
         }else{
 
@@ -170,17 +170,18 @@ export default function Usuarios(){
                                     </td>
 
                                     <td className="px-6 py-4 text-sm text-[#6B6054]">
-
                                         <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
-                                                usuario.status === "ATIVO"
+                                                usuario.status === "BLOQUEADO"
+                                                    ? "bg-amber-50 text-amber-700"
+                                                    : usuario.status === "ATIVO"
                                                     ? "bg-emerald-50 text-emerald-700"
-                                                    : "bg-amber-50 text-amber-700"
+                                                    : "bg-red-50 text-red-600"
                                             }`}
                                         >
                                             {usuario.status}
                                         </span>
-
+                                
                                     </td>
 
                                     <td className="px-6 py-4 text-sm text-[#6B6054]">
@@ -194,24 +195,25 @@ export default function Usuarios(){
                                                 Editar
                                             </Link>
 
-                                            <button
-                                                onClick={()=> handleAlterarStatusUsuario(usuario)}
-                                                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 ${
-                                                    usuario.status === "ATIVO"
-                                                        ? "bg-emerald-500"
-                                                        : "bg-amber-400"
-                                                }`}
+                                            <button onClick={()=> handleDeletarUsuario(usuario)}
+                                            className="inline-flex items-center justify-center rounded-lg border border-[#E7C9C3] bg-[#FFF7F5] px-3.5 py-2 text-sm font-medium text-[#A65F55] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FCEDEA] hover:border-[#DFAFA6] hover:text-[#8F4F46] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#F0D7D2]"
                                             >
+                                                Deletar
+                                                </button>
 
-                                                <span
-                                                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${
-                                                        usuario.status === "ATIVO"
-                                                            ? "translate-x-6"
-                                                            : "translate-x-1"
-                                                    }`}
-                                                ></span>
 
-                                            </button>
+                                            <button onClick={()=> handleAlterarStatusUsuario(usuario)}
+                                     className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-all duration-300 ${
+                                        usuario.status === "ATIVO"
+                                           ? "bg-emerald-500": "bg-amber-400"
+                                     }`} >
+                                            <span
+                                   className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${
+                                          usuario.status === "ATIVO"
+                                           ? "translate-x-6" : "translate-x-1"
+                                        }`}
+                                            ></span>
+                                        </button>
 
                                         </div>
 

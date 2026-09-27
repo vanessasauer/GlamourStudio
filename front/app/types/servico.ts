@@ -5,7 +5,7 @@ export class Servico{
         public descricao:string,
         public valor:number,
         public duracaoMinutos:number,
-        public status:string
+        public statusServico:string
     ){}
 }
 

@@ -10,7 +10,7 @@ export default function ClientesForm({clienteExistente}:ClienteFormProps) {
 
 const  [cliente, setCliente] = useState<Cliente>(
     clienteExistente ||
-    new Cliente(null,"","","","","")
+    new Cliente(null,"","","","","ATIVO")
 );
 
 const handlerChange = ( campo : 'nome' | 'dataNascimento' | 'email' | 'telefone', valor:string) =>{
@@ -23,7 +23,7 @@ const handlerChange = ( campo : 'nome' | 'dataNascimento' | 'email' | 'telefone'
             campo === 'dataNascimento' ? valor : valorAnterior.dataNascimento,
             campo === 'email' ? valor : valorAnterior.email,
             campo === 'telefone' ? valor : valorAnterior.telefone,
-            valorAnterior.status
+            valorAnterior.statusCliente
         )
     )
 }
@@ -94,7 +94,7 @@ const handlerSalvar = async (formdata : FormData) =>{
                         value = {cliente.dataNascimento}
                         required
                         onChange={(e)=> handlerChange('dataNascimento', e.target.value)}
-                        placeholder="01/01/2000"
+                        placeholder="2000-01-01"
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
