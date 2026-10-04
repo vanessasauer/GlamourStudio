@@ -14,6 +14,10 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
+
+    //A TokenService é uma classe de serviço responsável pelo JWT.
+    // Ela possui um método para gerar tokens, um método para verificar tokens e um método auxiliar para calcular a data de expiração.
+
     @Value("${spring.secret}")
     private String secret;
 

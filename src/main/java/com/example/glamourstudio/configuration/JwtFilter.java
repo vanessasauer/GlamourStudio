@@ -12,6 +12,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+//Intercepta as requisições e trabalha com o token recebido no header Authorization
+// antes que a requisição continue.
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
