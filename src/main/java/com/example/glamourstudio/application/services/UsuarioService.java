@@ -4,7 +4,6 @@ import com.example.glamourstudio.application.DTOs.LoginResponse;
 import com.example.glamourstudio.application.DTOs.UsuarioResponse;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

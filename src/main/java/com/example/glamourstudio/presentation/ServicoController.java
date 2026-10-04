@@ -2,6 +2,9 @@ package com.example.glamourstudio.presentation;
 
 
 import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
+import com.example.glamourstudio.application.DTOs.ServicoResponse;
+import com.example.glamourstudio.application.DTOs.UsuarioResponse;
+import com.example.glamourstudio.application.services.ServicoService;
 import com.example.glamourstudio.domain.entities.EnumStatusServico;
 import com.example.glamourstudio.domain.entities.Servico;
 import com.example.glamourstudio.domain.repository.ServicoRepository;
@@ -12,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/servico")
 @Tag(name = "Serviços", description = "Grupo de APIs responsável por controlar a estrutura de criação e consulta de serviços do sistema!")
@@ -20,12 +25,15 @@ public class ServicoController {
     @Autowired
     private ServicoRepository servicoRepository;
 
+
+    private ServicoService servicoService;
+
     @GetMapping
     @Operation(summary = "Método de consulta de lista de serviços!",
             description = "Método responsável em efetuar a consulta de todos os serviços sem filtro.")
-    public ResponseEntity<?> listarTodos(){
+    public ResponseEntity<List<ServicoResponse>> listarTodos(){
 
-        return ResponseEntity.ok(servicoRepository.findAll());
+        return ResponseEntity.ok(servicoService.listarTodosServicosTable());
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,9 @@
 package com.example.glamourstudio.presentation;
 
+import com.example.glamourstudio.application.DTOs.AtendimentoResponse;
 import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
+import com.example.glamourstudio.application.DTOs.ClienteResponse;
+import com.example.glamourstudio.application.services.AtendimentoService;
 import com.example.glamourstudio.domain.entities.Atendimento;
 import com.example.glamourstudio.domain.entities.EnumStatusAtendimento;
 import com.example.glamourstudio.domain.repository.AtendimentoRepository;
@@ -11,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/atendimento")
 @Tag(name = "Atendimentos", description = "Grupo de APIs responsável por controlar a estrutura de criação e consulta de atendimentos do sistema!")
@@ -19,12 +24,15 @@ public class AtendimentoController {
     @Autowired
     private AtendimentoRepository atendimentoRepository;
 
+
+    private AtendimentoService atendimentoService;
+
     @GetMapping
     @Operation(summary = "Método de consulta de lista de atendimentos!",
             description = "Método responsável em efetuar a consulta de todos os atendimentos sem filtro.")
-    public ResponseEntity<?> listarTodos(){
+    public ResponseEntity<List<AtendimentoResponse>> listarTodos(){
 
-        return ResponseEntity.ok(atendimentoRepository.findAll());
+        return ResponseEntity.ok(atendimentoService.listarTodosAtendimentosTable());
     }
 
     @GetMapping("/{id}")
