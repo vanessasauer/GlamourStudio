@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.example.glamourstudio.application.DTOs.LoginRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,25 +19,25 @@ public class TokenService {
     //A TokenService é uma classe de serviço responsável pelo JWT.
     // Ela possui um método para gerar tokens, um método para verificar tokens e um método auxiliar para calcular a data de expiração.
 
-    @Value("${spring.secret}")
+    @Value("${spring.secretkey}")
     private String secret;
 
-    @Value("${spring.expiracao}")
-    private long expiracao;
+    @Value("${spring.tempo_expiracao}")
+    private Long tempo;
 
-    @Value("${spring.emissor}")
-    private String emissor;
+    private String emissor = "DEVTEST";
 
 
-    public String gerarToken(String subject){
+    public String gerarToken(LoginRequest loginRequest) {
 
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            String token = com.auth0.jwt.JWT.create()
+            String token = JWT.create()
                     .withIssuer(emissor)
-                    .withSubject(subject)
-                    .withExpiresAt(getDataExpiracao())
+                    .withSubject(loginRequest.email())
+                    .withExpiresAt(this.gerarDataExpiracao())
                     .sign(algorithm);
+
             return token;
         }
 
@@ -49,16 +50,11 @@ public class TokenService {
 
         }
 
-    private Instant getDataExpiracao(){
-
-        /// pegar data atual
+    private Instant gerarDataExpiracao(){
         var dataAtual = LocalDateTime.now();
+        dataAtual = dataAtual.plusMinutes(tempo);
 
-        // adicionar ou diminuir tempo da data atual
-        var dataFutura = dataAtual.plusMinutes(expiracao);
-
-        // convertendo em instante
-        return dataFutura.toInstant(ZoneOffset.of("-03:00"));
+        return dataAtual.toInstant(ZoneOffset.of("-03:00"));
 
     }
 

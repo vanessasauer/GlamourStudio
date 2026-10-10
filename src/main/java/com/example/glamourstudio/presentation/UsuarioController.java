@@ -1,6 +1,8 @@
 package com.example.glamourstudio.presentation;
 
 import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
+import com.example.glamourstudio.application.DTOs.CriarAdminRequest;
+import com.example.glamourstudio.application.DTOs.CriarAdminResponse;
 import com.example.glamourstudio.application.DTOs.UsuarioResponse;
 import com.example.glamourstudio.application.services.UsuarioService;
 import com.example.glamourstudio.domain.entities.EnumStatusUsuario;
@@ -35,6 +37,26 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuarioService.listarTodosUsuariosTable());
     }
+
+    @PostMapping("/admin")
+    public ResponseEntity<CriarAdminResponse> criarAdmin(@RequestBody CriarAdminRequest criarAdminRequest){
+
+        try {
+
+            CriarAdminResponse respostaSalvar = usuarioService.criarAdmin(criarAdminRequest);
+
+            return ResponseEntity.ok(respostaSalvar);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+
+
+
+
 
     @GetMapping("/{id}")
     @Operation(summary = "Método de consulta de usuários por ID",

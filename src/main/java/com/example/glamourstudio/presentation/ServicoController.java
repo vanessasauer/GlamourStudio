@@ -1,9 +1,7 @@
 package com.example.glamourstudio.presentation;
 
 
-import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
-import com.example.glamourstudio.application.DTOs.ServicoResponse;
-import com.example.glamourstudio.application.DTOs.UsuarioResponse;
+import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.ServicoService;
 import com.example.glamourstudio.domain.entities.EnumStatusServico;
 import com.example.glamourstudio.domain.entities.Servico;
@@ -34,6 +32,21 @@ public class ServicoController {
     public ResponseEntity<List<ServicoResponse>> listarTodos(){
 
         return ResponseEntity.ok(servicoService.listarTodosServicosTable());
+    }
+
+    @PostMapping("/adminServico")
+    public ResponseEntity<CriarServicoResponse> criarServicoAdmin(@RequestBody CriarServicoRequest criarServicoRequest){
+
+        try {
+
+            CriarServicoResponse respostaSalvar = servicoService.criarServicoAdmin(criarServicoRequest);
+
+            return ResponseEntity.ok(respostaSalvar);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @GetMapping("/{id}")

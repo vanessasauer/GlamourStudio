@@ -1,6 +1,8 @@
 package com.example.glamourstudio.domain.entities;
 
 
+import com.example.glamourstudio.application.DTOs.CriarAdminRequest;
+import com.example.glamourstudio.application.DTOs.CriarServicoRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,16 @@ public class Servico{
 
     private Integer duracaoMinutos;
 
+    private String role = "ROLE_USER";
+
     private EnumStatusServico statusServico = EnumStatusServico.ATIVO;
+
+    public Servico(CriarServicoRequest criarServicoRequest) {
+        this.setNome(criarServicoRequest.nome());
+        this.setDescricao(criarServicoRequest.descricao());
+        this.setValor(criarServicoRequest.valor());
+        this.setDuracaoMinutos(criarServicoRequest.duracaoMinutos());
+        this.setRole("ROLE_ADMIN");
+    }
 
 }

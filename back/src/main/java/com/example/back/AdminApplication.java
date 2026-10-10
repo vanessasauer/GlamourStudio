@@ -10,7 +10,7 @@ import java.io.IOException;
 public class AdminApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AdminApplication.class.getResource("loggin-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AdminApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Admin GlamourStudio!");
         stage.setScene(scene);
