@@ -28,8 +28,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-
-
     @GetMapping
     @Operation(summary = "Método de consulta de lista de usuários!",
             description = "Método responsável em efetuar a consulta de todos os usuários sem filtro.")
@@ -42,9 +40,7 @@ public class UsuarioController {
     public ResponseEntity<CriarAdminResponse> criarAdmin(@RequestBody CriarAdminRequest criarAdminRequest){
 
         try {
-
             CriarAdminResponse respostaSalvar = usuarioService.criarAdmin(criarAdminRequest);
-
             return ResponseEntity.ok(respostaSalvar);
 
         } catch (RuntimeException e) {
@@ -52,10 +48,6 @@ public class UsuarioController {
         }
 
     }
-
-
-
-
 
 
     @GetMapping("/{id}")

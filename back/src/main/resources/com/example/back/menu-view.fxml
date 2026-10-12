@@ -8,6 +8,6 @@
    <children>
       <Button layoutX="50.0" layoutY="333.0" mnemonicParsing="false" onAction="#sair" text="Sair" />
       <Button layoutX="113.0" layoutY="79.0" mnemonicParsing="false" onAction="#abrirCadastro" prefHeight="25.0" prefWidth="147.0" text="Cadastro Admin" />
-      <Button layoutX="113.0" layoutY="123.0" mnemonicParsing="false" onAction="#cadastrarEspecialidade" prefHeight="25.0" prefWidth="147.0" text="Cadastrar Especialidade" />
+      <Button layoutX="113.0" layoutY="123.0" mnemonicParsing="false" onAction="#cadastrarServico" prefHeight="25.0" prefWidth="147.0" text="Cadastrar Serviço" />
    </children>
 </AnchorPane>

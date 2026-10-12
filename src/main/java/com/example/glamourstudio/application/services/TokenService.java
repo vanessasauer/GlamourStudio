@@ -28,13 +28,13 @@ public class TokenService {
     private String emissor = "DEVTEST";
 
 
-    public String gerarToken(LoginRequest loginRequest) {
+    public String gerarToken(LoginRequest loginRequestDto) {
 
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             String token = JWT.create()
                     .withIssuer(emissor)
-                    .withSubject(loginRequest.email())
+                    .withSubject(loginRequestDto.email())
                     .withExpiresAt(this.gerarDataExpiracao())
                     .sign(algorithm);
 

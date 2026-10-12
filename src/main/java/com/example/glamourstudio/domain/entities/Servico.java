@@ -31,7 +31,7 @@ public class Servico{
 
     private Integer duracaoMinutos;
 
-    private String role = "ROLE_USER";
+    private String role = "ROLE_SERVICO";
 
     private EnumStatusServico statusServico = EnumStatusServico.ATIVO;
 
@@ -40,7 +40,7 @@ public class Servico{
         this.setDescricao(criarServicoRequest.descricao());
         this.setValor(criarServicoRequest.valor());
         this.setDuracaoMinutos(criarServicoRequest.duracaoMinutos());
-        this.setRole("ROLE_ADMIN");
+        this.setRole("ROLE_SERVICOADMIN");
     }
 
 }

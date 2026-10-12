@@ -23,7 +23,7 @@ public class ServicoController {
     @Autowired
     private ServicoRepository servicoRepository;
 
-
+    @Autowired
     private ServicoService servicoService;
 
     @GetMapping

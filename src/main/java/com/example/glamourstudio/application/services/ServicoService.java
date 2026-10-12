@@ -6,9 +6,11 @@ import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ServicoService {
 
 
@@ -32,7 +34,7 @@ public class ServicoService {
 
     public CriarServicoResponse criarServicoAdmin(CriarServicoRequest criarServicoRequest) {
 
-        if (!criarServicoRequest.secretkey().equals(secret)){
+        if (!criarServicoRequest.secretKey().equals(secret)){
             return new CriarServicoResponse(0L,"Serviço salvo com sucesso!");
         }
 

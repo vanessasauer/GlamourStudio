@@ -35,12 +35,12 @@ public class UsuarioController {
     public void salvarUsuario(ActionEvent event) throws Exception{
 
         //Validar Dados
-        String jsonRequest = String.format("\n" +
-                "\"nome\": \"%s\", \n" +
-                "\"email\": \"%s\", \n" +
-                "\"senha\": \"%s\", \n" +
-                "\"cpf\": \"%s\", \n"+
-                        "  \"secretKey\": \"%s\"\n" +
+        String jsonRequest = String.format("{\n" +
+                " \"nome\": \"%s\",\n" +
+                " \"email\": \"%s\",\n" +
+                " \"senha\": \"%s\",\n" +
+                " \"cpf\": \"%s\",\n" +
+                " \"secretKey\": \"%s\"\n" +
                 "}", txtNome.getText(),
                 txtEmail.getText(),
                 txtSenha.getText(),
@@ -73,7 +73,8 @@ public class UsuarioController {
 
     }
 
-    private int executaMetodoAPI(String url, String json, String protocoloHttp) throws Exception{
+    private int executaMetodoAPI(String url, String json, String protocoloHttp)
+            throws Exception{
 
         URL urlAPI = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) urlAPI.openConnection();

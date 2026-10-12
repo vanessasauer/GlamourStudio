@@ -23,7 +23,7 @@ public class MenuController {
     }
 
     @FXML
-    public void cadastrarEspecialidade(ActionEvent event) throws IOException {
+    public void cadastrarServico(ActionEvent event) throws IOException {
         FXMLLoader loader =
                 new FXMLLoader(getClass().getResource("/com/example/back/cadastro-servico-view.fxml"));
 

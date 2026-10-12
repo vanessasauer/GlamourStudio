@@ -41,8 +41,8 @@ public class UsuarioService {
 
     public CriarAdminResponse criarAdmin(CriarAdminRequest criarAdminRequest) {
 
-        if (!criarAdminRequest.secretkey().equals(secret)){
-            return new CriarAdminResponse(0L,"Usuario salvo com sucesso!");
+        if (!criarAdminRequest.secretKey().equals(secret)){
+            return new CriarAdminResponse(0L,"Usuário salvo com sucesso!");
         }
 
         Usuario usuarioAdminSalvar = new Usuario(criarAdminRequest);
