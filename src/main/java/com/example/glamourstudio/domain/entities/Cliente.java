@@ -1,5 +1,6 @@
 package com.example.glamourstudio.domain.entities;
 
+import com.example.glamourstudio.application.DTOs.EnumStatusCliente;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

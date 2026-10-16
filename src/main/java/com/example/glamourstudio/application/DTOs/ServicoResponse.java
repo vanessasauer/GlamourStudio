@@ -1,5 +1,4 @@
 package com.example.glamourstudio.application.DTOs;
-import com.example.glamourstudio.domain.entities.EnumStatusServico;
 import com.example.glamourstudio.domain.entities.Servico;
 
 import java.math.BigDecimal;

@@ -1,7 +1,6 @@
 package com.example.glamourstudio.application.DTOs;
 
 import com.example.glamourstudio.domain.entities.Cliente;
-import com.example.glamourstudio.domain.entities.EnumStatusCliente;
 
 import java.time.LocalDate;
 

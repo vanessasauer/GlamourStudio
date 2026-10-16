@@ -1,5 +1,6 @@
 package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
+import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
 import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,4 +51,27 @@ public class UsuarioService {
 
         return new CriarAdminResponse(usuarioAdminSalvar.getId(),"Usuário salvo com sucesso");
     }
+
+    public UsuarioResponse salvarUsuario(UsuarioRequest usuario) {
+
+        Usuario usuarioBanco = new Usuario(usuario);
+
+        usuarioRepository.save(usuarioBanco);
+        return new UsuarioResponse(usuarioBanco);
+    }
+
+    public UsuarioResponse buscarPorId(Long id) {
+
+        var usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null) {
+            return null;
+        }
+
+        return new UsuarioResponse(usuario);
+    }
+
+    public boolean atualizarStatus(EnumStatusUsuario status) {
+
+    }
+
 }

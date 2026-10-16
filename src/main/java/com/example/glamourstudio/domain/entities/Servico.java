@@ -1,8 +1,8 @@
 package com.example.glamourstudio.domain.entities;
 
 
-import com.example.glamourstudio.application.DTOs.CriarAdminRequest;
 import com.example.glamourstudio.application.DTOs.CriarServicoRequest;
+import com.example.glamourstudio.application.DTOs.EnumStatusServico;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

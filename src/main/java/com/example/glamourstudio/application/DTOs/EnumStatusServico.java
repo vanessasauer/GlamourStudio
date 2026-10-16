@@ -1,4 +1,4 @@
-package com.example.glamourstudio.domain.entities;
+package com.example.glamourstudio.application.DTOs;
 
 public enum EnumStatusServico {
     ATIVO,

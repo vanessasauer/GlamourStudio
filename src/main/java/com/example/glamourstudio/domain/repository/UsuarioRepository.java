@@ -1,6 +1,6 @@
 package com.example.glamourstudio.domain.repository;
 
-import com.example.glamourstudio.domain.entities.EnumStatusUsuario;
+import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
 import com.example.glamourstudio.domain.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

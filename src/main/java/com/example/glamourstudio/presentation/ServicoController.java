@@ -3,7 +3,7 @@ package com.example.glamourstudio.presentation;
 
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.ServicoService;
-import com.example.glamourstudio.domain.entities.EnumStatusServico;
+import com.example.glamourstudio.application.DTOs.EnumStatusServico;
 import com.example.glamourstudio.domain.entities.Servico;
 import com.example.glamourstudio.domain.repository.ServicoRepository;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,7 +1,7 @@
 package com.example.glamourstudio.application.DTOs;
 
 import com.example.glamourstudio.domain.entities.Atendimento;
-import com.example.glamourstudio.domain.entities.EnumStatusAtendimento;
+
 import java.time.LocalDateTime;
 
 public record AtendimentoResponse(Long id, String cliente, String profissional, LocalDateTime dataHora, String servico, EnumStatusAtendimento statusAtendimento) {

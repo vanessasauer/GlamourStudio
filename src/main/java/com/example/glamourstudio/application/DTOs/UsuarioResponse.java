@@ -1,6 +1,5 @@
 package com.example.glamourstudio.application.DTOs;
 
-import com.example.glamourstudio.domain.entities.EnumStatusUsuario;
 import com.example.glamourstudio.domain.entities.Usuario;
 
 public record UsuarioResponse(Long id, String nome, String cpf, String email, EnumStatusUsuario status) {
@@ -10,11 +9,10 @@ public record UsuarioResponse(Long id, String nome, String cpf, String email, En
         this(
                 usuarioEntidade.getId(),
                 usuarioEntidade.getNome(),
-                usuarioEntidade.getCpf(),
+                usuarioEntidade.getCpf().toString(),
                 usuarioEntidade.getEmail(),
                 usuarioEntidade.getStatus()
         );
     }
 
-    //Nesta record é possível mascarar o cpf, email...
 }

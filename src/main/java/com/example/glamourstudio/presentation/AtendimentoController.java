@@ -2,10 +2,9 @@ package com.example.glamourstudio.presentation;
 
 import com.example.glamourstudio.application.DTOs.AtendimentoResponse;
 import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
-import com.example.glamourstudio.application.DTOs.ClienteResponse;
 import com.example.glamourstudio.application.services.AtendimentoService;
 import com.example.glamourstudio.domain.entities.Atendimento;
-import com.example.glamourstudio.domain.entities.EnumStatusAtendimento;
+import com.example.glamourstudio.application.DTOs.EnumStatusAtendimento;
 import com.example.glamourstudio.domain.repository.AtendimentoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
