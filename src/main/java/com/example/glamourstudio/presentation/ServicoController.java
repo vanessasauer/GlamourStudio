@@ -4,8 +4,6 @@ package com.example.glamourstudio.presentation;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.ServicoService;
 import com.example.glamourstudio.application.DTOs.EnumStatusServico;
-import com.example.glamourstudio.domain.entities.Servico;
-import com.example.glamourstudio.domain.repository.ServicoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,6 @@ import java.util.List;
 @RequestMapping("/servico")
 @Tag(name = "Serviços", description = "Grupo de APIs responsável por controlar a estrutura de criação e consulta de serviços do sistema!")
 public class ServicoController {
-
-    @Autowired
-    private ServicoRepository servicoRepository;
 
     @Autowired
     private ServicoService servicoService;
@@ -52,8 +47,8 @@ public class ServicoController {
     @GetMapping("/{id}")
     @Operation(summary = "Método de consulta de serviços por ID",
             description = "Método responsável em efetuar a consulta dos serviços filtrando por ID.")
-    public ResponseEntity<Servico> buscarPorId(@PathVariable Long id){
-        Servico servicoBanco = servicoRepository.findById(id).orElse(null);
+    public ResponseEntity<ServicoResponse> buscarPorId(@PathVariable Long id){
+        ServicoResponse servicoBanco = servicoService.buscarPorId(id);
         if(servicoBanco != null){
             return ResponseEntity.ok(servicoBanco);
         }
@@ -65,10 +60,14 @@ public class ServicoController {
     @Operation(summary = "Método de criação de serviços!",
             description = "Método responsável em efetuar a criação de novos serviços."
     )
-    public ResponseEntity<Servico> criar(@RequestBody Servico servico){
+    public ResponseEntity<?> criar(@RequestBody ServicoRequest servico){
 
-        var servicoBanco = servicoRepository.save(servico);
-        return ResponseEntity.ok(servicoBanco);
+        try {
+            ServicoResponse servicoBanco = servicoService.salvarServico(servico, 0L);
+            return ResponseEntity.ok(servicoBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 
@@ -77,10 +76,9 @@ public class ServicoController {
             description = "Método responsável por atualizar o status do serviço pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
-        Servico servicoBanco = servicoRepository.findById(id).orElse(null); //vai trazer o estado atual do id do serviço no banco
-        if ( servicoBanco!=null){
-            servicoBanco.setStatusServico(statusRequest.statusServico());
-            servicoRepository.save(servicoBanco);
+        var atualizarServico = servicoService.atualizarStatus(statusRequest.statusServico(),id);
+
+        if (atualizarServico){
             return ResponseEntity.ok().build();
         }
 
@@ -90,23 +88,13 @@ public class ServicoController {
     @PutMapping("/{id}")
     @Operation(summary = "Método de atualizar as informações de um serviço por ID.",
             description = "Método responsável por atualizar os dados de um serviço existente filtrando pelo seu ID.")
-    public ResponseEntity<Servico> atualizar(@PathVariable Long id, @RequestBody Servico servico ){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody ServicoRequest servico ){
 
         try {
-
-            Servico servicoBanco = servicoRepository.findById(id).orElse(null);
-            if ( servicoBanco != null){
-                servicoBanco.setStatusServico(servico.getStatusServico());
-                servicoBanco.setNome(servico.getNome());
-                servicoBanco.setDescricao(servico.getDescricao());
-                servicoBanco.setValor(servico.getValor());
-                servicoBanco.setDuracaoMinutos(servico.getDuracaoMinutos());
-                servicoRepository.save(servicoBanco);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            ServicoResponse servicoBanco = servicoService.salvarServico(servico,id);
+            return ResponseEntity.ok(servicoBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
@@ -116,14 +104,13 @@ public class ServicoController {
             description = "Método responsável por excluir um serviço existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
-        Servico servicoBanco = servicoRepository.findById(id).orElse(null);
-        if ( servicoBanco!=null){
-            servicoBanco.setStatusServico(EnumStatusServico.EXCLUIDO);
-           servicoRepository.save(servicoBanco);
+        var atualizarServico = servicoService.atualizarStatus(EnumStatusServico.EXCLUIDO,id);
+
+        if(atualizarServico){
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.notFound().build();
+        return  ResponseEntity.notFound().build();
     }
 
 

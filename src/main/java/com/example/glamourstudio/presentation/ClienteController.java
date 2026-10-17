@@ -1,11 +1,6 @@
 package com.example.glamourstudio.presentation;
-
-import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
-import com.example.glamourstudio.application.DTOs.ClienteResponse;
+import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.ClienteService;
-import com.example.glamourstudio.domain.entities.Cliente;
-import com.example.glamourstudio.application.DTOs.EnumStatusCliente;
-import com.example.glamourstudio.domain.repository.ClienteRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +16,6 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    private ClienteRepository clienteRepository;
-
     private ClienteService clienteService;
 
     @GetMapping
@@ -36,8 +29,8 @@ public class ClienteController {
     @GetMapping("/{id}")
     @Operation(summary = "Método de consulta de clientes por ID",
             description = "Método responsável em efetuar a consulta dos clientes filtrando por ID.")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id){
-        Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
+    public ResponseEntity<ClienteResponse> buscarPorId(@PathVariable Long id){
+        ClienteResponse clienteBanco = clienteService.buscarPorId(id);
         if(clienteBanco != null){
             return ResponseEntity.ok(clienteBanco);
         }
@@ -49,10 +42,14 @@ public class ClienteController {
     @Operation(summary = "Método de criação de clientes!",
             description = "Método responsável em efetuar a criação de novos clientes."
     )
-    public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente){
+    public ResponseEntity<?> criar(@RequestBody ClienteRequest cliente){
 
-        var clienteBanco = clienteRepository.save(cliente);
-        return ResponseEntity.ok(clienteBanco);
+        try {
+            ClienteResponse clienteBanco = clienteService.salvarCliente(cliente, 0L);
+            return ResponseEntity.ok(clienteBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 
@@ -61,10 +58,9 @@ public class ClienteController {
             description = "Método responsável por atualizar o status do cliente pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
-        Cliente clienteBanco = clienteRepository.findById(id).orElse(null); //vai trazer o estado atual do id do cliente no banco
-        if ( clienteBanco!=null){
-            clienteBanco.setStatusCliente(statusRequest.statusCliente());
-            clienteRepository.save(clienteBanco);
+        var atualizarCliente = clienteService.atualizarStatus(statusRequest.statusCliente(),id);
+
+        if (atualizarCliente){
             return ResponseEntity.ok().build();
         }
 
@@ -74,46 +70,32 @@ public class ClienteController {
     @PutMapping("/{id}")
     @Operation(summary = "Método de atualizar as informações de um cliente por ID.",
             description = "Método responsável por atualizar os dados de um cliente existente filtrando pelo seu ID.")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody Cliente cliente ){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody ClienteRequest cliente ){
 
         try {
-
-            Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
-            if ( clienteBanco != null){
-               clienteBanco.setStatusCliente(cliente.getStatusCliente());
-                clienteBanco.setNome(cliente.getNome());
-                clienteBanco.setDataNascimento(cliente.getDataNascimento());
-                clienteBanco.setEmail(cliente.getEmail());
-                clienteBanco.setTelefone(cliente.getTelefone());
-                clienteRepository.save(clienteBanco);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            ClienteResponse clienteBanco = clienteService.salvarCliente(cliente,id);
+            return ResponseEntity.ok(clienteBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
+
 
     @DeleteMapping("/{id}/excluir")
     @Operation(summary = "Método de excluir os clientes filtrando pelo seu ID.",
             description = "Método responsável por excluir um cliente existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
-        Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
-        if ( clienteBanco!=null){
-            clienteBanco.setStatusCliente(EnumStatusCliente.EXCLUIDO);
-            clienteRepository.save(clienteBanco);
+        var atualizarCliente = clienteService.atualizarStatus(EnumStatusCliente.EXCLUIDO,id);
+
+        if(atualizarCliente){
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.notFound().build();
+        return  ResponseEntity.notFound().build();
+
     }
-
-
-
-
-
 
 
 }

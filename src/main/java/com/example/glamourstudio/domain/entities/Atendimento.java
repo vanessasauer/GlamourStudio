@@ -1,6 +1,8 @@
 package com.example.glamourstudio.domain.entities;
 
+import com.example.glamourstudio.application.DTOs.AtendimentoRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusAtendimento;
+import com.example.glamourstudio.application.DTOs.ServicoRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,16 @@ public class Atendimento {
 
     private String servico;
 
+    private String role = "ROLE_ATENDIMENTO";
+
     private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.AGENDADO;
 
+    public Atendimento(AtendimentoRequest atendimento) {
+        this.setCliente(atendimento.cliente());
+        this.setProfissional(atendimento.profissional());
+        this.setDataHora(atendimento.dataHora());
+        this.setServico(atendimento.servico());
+        this.setRole("ROLE_ATENDIMENTO");
+    }
 
 }

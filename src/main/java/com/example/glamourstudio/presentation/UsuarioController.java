@@ -3,8 +3,6 @@ package com.example.glamourstudio.presentation;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.UsuarioService;
 import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
-import com.example.glamourstudio.domain.entities.Usuario;
-import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,6 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping
@@ -32,6 +27,8 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuarioService.listarTodosUsuariosTable());
     }
+
+
 
     @PostMapping("/admin")
     public ResponseEntity<CriarAdminResponse> criarAdmin(@RequestBody CriarAdminRequest criarAdminRequest){
@@ -65,7 +62,7 @@ public class UsuarioController {
     )
     public ResponseEntity<?> criar(@RequestBody UsuarioRequest usuario){
         try {
-            UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario);
+            UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario, 0L);
             return ResponseEntity.ok(usuarioBanco);
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -92,7 +89,7 @@ public class UsuarioController {
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody UsuarioRequest usuario ){
 
         try {
-            UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario,Long id)
+            UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario,id);
             return ResponseEntity.ok(usuarioBanco);
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -105,14 +102,14 @@ public class UsuarioController {
             description = "Método responsável por excluir um usuário existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
-        Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
-        if ( usuarioBanco!=null){
-            usuarioBanco.setStatus(EnumStatusUsuario.EXCLUIDO);
-            usuarioRepository.save(usuarioBanco);
+        var atualizarUsuario = usuarioService.atualizarStatus(EnumStatusUsuario.EXCLUIDO,id);
+
+        if(atualizarUsuario){
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.notFound().build();
+        return  ResponseEntity.notFound().build();
+
     }
 
 

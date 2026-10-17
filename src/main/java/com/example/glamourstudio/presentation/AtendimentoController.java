@@ -1,11 +1,7 @@
 package com.example.glamourstudio.presentation;
 
-import com.example.glamourstudio.application.DTOs.AtendimentoResponse;
-import com.example.glamourstudio.application.DTOs.AtualizarStatusRequest;
+import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.services.AtendimentoService;
-import com.example.glamourstudio.domain.entities.Atendimento;
-import com.example.glamourstudio.application.DTOs.EnumStatusAtendimento;
-import com.example.glamourstudio.domain.repository.AtendimentoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +17,6 @@ import java.util.List;
 public class AtendimentoController {
 
     @Autowired
-    private AtendimentoRepository atendimentoRepository;
-
-
     private AtendimentoService atendimentoService;
 
     @GetMapping
@@ -37,8 +30,8 @@ public class AtendimentoController {
     @GetMapping("/{id}")
     @Operation(summary = "Método de consulta de atendimentos por ID",
             description = "Método responsável em efetuar a consulta dos atendimentos por ID.")
-    public ResponseEntity<Atendimento> buscarPorId(@PathVariable Long id){
-        Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
+    public ResponseEntity<AtendimentoResponse> buscarPorId(@PathVariable Long id){
+        AtendimentoResponse atendimentoBanco = atendimentoService.buscarPorId(id);
         if(atendimentoBanco != null){
             return ResponseEntity.ok(atendimentoBanco);
         }
@@ -50,10 +43,14 @@ public class AtendimentoController {
     @Operation(summary = "Método de criação de atendimentos!",
             description = "Método responsável em efetuar a criação de novos atendimentos."
     )
-    public ResponseEntity<Atendimento> criar(@RequestBody Atendimento atendimento){
+    public ResponseEntity<?> criar(@RequestBody AtendimentoRequest atendimento){
 
-        var atendimentoBanco = atendimentoRepository.save(atendimento);
-        return ResponseEntity.ok(atendimentoBanco);
+        try {
+            AtendimentoResponse atendimentoBanco = atendimentoService.salvarAtendimento(atendimento, 0L);
+            return ResponseEntity.ok(atendimentoBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 
@@ -63,36 +60,26 @@ public class AtendimentoController {
             description = "Método responsável por atualizar o status do atendimento pelo seu ID.")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest statusRequest){
 
-        Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null); //vai trazer o estado atual do id do atendimento no banco
-        if ( atendimentoBanco!=null){
-            atendimentoBanco.setStatusAtendimento(statusRequest.statusAtendimento());
-            atendimentoRepository.save(atendimentoBanco);
+        var atualizarAtendimento = atendimentoService.atualizarStatus(statusRequest.statusAtendimento(),id);
+
+        if (atualizarAtendimento){
             return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.notFound().build();
     }
 
+
     @PutMapping("/{id}")
     @Operation(summary = "Método de atualizar as informações de um atendimento por ID.",
             description = "Método responsável por atualizar os dados de um atendimento existente pelo ID.")
-    public ResponseEntity<Atendimento> atualizar(@PathVariable Long id, @RequestBody Atendimento atendimento ){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody AtendimentoRequest atendimento ){
 
         try {
-
-            Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
-            if ( atendimentoBanco != null){
-                atendimentoBanco.setStatusAtendimento(atendimento.getStatusAtendimento());
-                atendimentoBanco.setCliente(atendimento.getCliente());
-                atendimentoBanco.setProfissional(atendimento.getProfissional());
-                atendimentoBanco.setDataHora(atendimento.getDataHora());
-                atendimentoBanco.setServico(atendimento.getServico());
-                atendimentoRepository.save(atendimentoBanco);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            AtendimentoResponse atendimentoBanco = atendimentoService.salvarAtendimento(atendimento,id);
+            return ResponseEntity.ok(atendimentoBanco);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
@@ -102,14 +89,14 @@ public class AtendimentoController {
             description = "Método responsável por excluir um atendimento existente pelo ID.")
     public ResponseEntity<Void> excluir(@PathVariable Long id){
 
-        Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
-        if ( atendimentoBanco!=null){
-            atendimentoBanco.setStatusAtendimento(EnumStatusAtendimento.CANCELADO);
-            atendimentoRepository.save(atendimentoBanco);
+        var atualizarAtendimento = atendimentoService.atualizarStatus(EnumStatusAtendimento.CANCELADO,id);
+
+        if(atualizarAtendimento){
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.notFound().build();
+        return  ResponseEntity.notFound().build();
+
     }
 
 

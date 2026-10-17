@@ -4,6 +4,7 @@ import com.example.glamourstudio.application.DTOs.CriarAdminRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
 import com.example.glamourstudio.application.DTOs.UsuarioRequest;
 import com.example.glamourstudio.domain.valueobject.CPF;
+import com.example.glamourstudio.domain.valueobject.EMAIL;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,25 +28,19 @@ public class Usuario {
 
     private String senha;
 
-    private String email;
+    @Embedded
+    private EMAIL email;
 
     private String role = "ROLE_USER";
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
-    public void setEmail(String email) {
-        if(!email.isEmpty() && !email.contains("@")){
-            throw new IllegalArgumentException("E-mail Inválido!");
-        }
-        this.email = email;
-    }
-
-    //é uma regra de negócio
+    //é uma regra de negócio para criar o usuário admin
     public Usuario(CriarAdminRequest criarAdminRequest) {
         this.setCpf(new CPF(criarAdminRequest.cpf()));
         this.setNome(criarAdminRequest.nome());
         this.setSenha(criarAdminRequest.senha());
-        this.setEmail(criarAdminRequest.email());
+        this.setEmail(new EMAIL(criarAdminRequest.email()));
         this.setRole("ROLE_ADMIN");
     }
 
@@ -53,7 +48,7 @@ public class Usuario {
         this.setCpf(new CPF(usuario.cpf()));
         this.setNome(usuario.nome());
         this.setSenha(usuario.senha());
-        this.setEmail(usuario.email());
+        this.setEmail(new EMAIL(usuario.email()));
         this.setRole("ROLE_USER");
     }
 

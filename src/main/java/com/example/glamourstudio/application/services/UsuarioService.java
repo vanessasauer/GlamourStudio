@@ -3,6 +3,8 @@ import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
 import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
+import com.example.glamourstudio.domain.valueobject.CPF;
+import com.example.glamourstudio.domain.valueobject.EMAIL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,12 +54,29 @@ public class UsuarioService {
         return new CriarAdminResponse(usuarioAdminSalvar.getId(),"Usuário salvo com sucesso");
     }
 
-    public UsuarioResponse salvarUsuario(UsuarioRequest usuario) {
+    public UsuarioResponse salvarUsuario(UsuarioRequest usuario, Long id) {
 
-        Usuario usuarioBanco = new Usuario(usuario);
+        //Novo Usuario
+        if(id == 0L) {
+            Usuario usuarioBanco = new Usuario(usuario);
+            usuarioRepository.save(usuarioBanco);
 
-        usuarioRepository.save(usuarioBanco);
-        return new UsuarioResponse(usuarioBanco);
+            return new UsuarioResponse(usuarioBanco);
+        }else {
+            //Usuario existente
+            Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
+            if(usuarioBanco!= null ){
+                usuarioBanco.setNome(usuario.nome());
+                usuarioBanco.setCpf(new CPF(usuario.cpf()));
+                usuarioBanco.setEmail(new EMAIL(usuario.email()));
+                usuarioBanco.setSenha(usuario.senha());
+                usuarioRepository.save(usuarioBanco);
+                return  new UsuarioResponse(usuarioBanco);
+            }
+
+        }
+
+        return null;
     }
 
     public UsuarioResponse buscarPorId(Long id) {
@@ -70,7 +89,16 @@ public class UsuarioService {
         return new UsuarioResponse(usuario);
     }
 
-    public boolean atualizarStatus(EnumStatusUsuario status) {
+    public boolean atualizarStatus(EnumStatusUsuario status, Long id) {
+
+        Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
+        if(usuarioBanco!= null ){
+            usuarioBanco.setStatus(status);
+            usuarioRepository.save(usuarioBanco);
+            return  true;
+        }
+        return false;
+
 
     }
 
