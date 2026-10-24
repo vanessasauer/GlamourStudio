@@ -1,5 +1,6 @@
 package com.example.glamourstudio.domain.valueobject;
 
+
 public class EMAIL {
 
     private String email;

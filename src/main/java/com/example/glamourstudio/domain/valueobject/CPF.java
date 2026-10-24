@@ -1,5 +1,7 @@
 package com.example.glamourstudio.domain.valueobject;
 
+
+
 public class CPF {
 
 

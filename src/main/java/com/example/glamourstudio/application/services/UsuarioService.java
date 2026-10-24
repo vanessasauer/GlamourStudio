@@ -7,9 +7,12 @@ import com.example.glamourstudio.domain.valueobject.CPF;
 import com.example.glamourstudio.domain.valueobject.EMAIL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class UsuarioService {
@@ -36,7 +39,16 @@ public class UsuarioService {
 
     public List<UsuarioResponse> listarTodosUsuariosTable() {
 
-        return usuarioRepository.findAll()
+        var usuarioLogado = getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return usuarioRepository.findAll()
+                    .stream()
+                    .map(UsuarioResponse::new)
+                    .toList();
+        }
+
+        return usuarioRepository.getUsuariosByEmpresa_Id(usuarioLogado.empresa_id())
                 .stream()
                 .map(UsuarioResponse::new)
                 .toList();
@@ -44,18 +56,24 @@ public class UsuarioService {
 
     public CriarAdminResponse criarAdmin(CriarAdminRequest criarAdminRequest) {
 
-        if (!criarAdminRequest.secretKey().equals(secret)){
-            return new CriarAdminResponse(0L,"Usuário salvo com sucesso!");
+        if(!criarAdminRequest.secretKey().equals(secret)){
+            return new CriarAdminResponse(0L,"Usuario Salvo com sucesso!");
+
         }
 
         Usuario usuarioAdminSalvar = new Usuario(criarAdminRequest);
         usuarioRepository.save(usuarioAdminSalvar);
 
-        return new CriarAdminResponse(usuarioAdminSalvar.getId(),"Usuário salvo com sucesso");
+        return new CriarAdminResponse(usuarioAdminSalvar.getId(),"Usuario Salvo com sucesso!");
+    }
+
+    public UsuarioLogado getUsuarioLogado(){
+        return (UsuarioLogado) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public UsuarioResponse salvarUsuario(UsuarioRequest usuario, Long id) {
 
+        var usuarioLogado = getUsuarioLogado();
         //Novo Usuario
         if(id == 0L) {
             Usuario usuarioBanco = new Usuario(usuario);

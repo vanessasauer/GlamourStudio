@@ -6,6 +6,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.glamourstudio.application.DTOs.LoginRequest;
+import com.example.glamourstudio.application.DTOs.UsuarioLogado;
+import com.example.glamourstudio.domain.entities.Token;
+import com.example.glamourstudio.domain.repository.TokenRepository;
+import com.example.glamourstudio.domain.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,28 +32,50 @@ public class TokenService {
 
     private String emissor = "DEVTEST";
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
 
     public String gerarToken(LoginRequest loginRequestDto) {
 
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            String token = JWT.create()
+        var usuario = usuarioRepository.findAll()
+                .stream().filter( u-> u.getEmail().equals(loginRequestDto.email()))
+                .findFirst().orElse(null);
+
+
+        String token = JWT.create()
                     .withIssuer(emissor)
                     .withSubject(loginRequestDto.email())
                     .withExpiresAt(this.gerarDataExpiracao())
                     .sign(algorithm);
 
+        tokenRepository.save(new Token(token,usuario));
+
             return token;
         }
 
-        public DecodedJWT verificarToken(String token) throws JWTVerificationException {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+    public UsuarioLogado verificarToken(String token) throws JWTVerificationException {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            JWTVerifier verificador = JWT.require(algorithm).withIssuer(emissor).build();
+        JWTVerifier verificador = JWT.require(algorithm).withIssuer(emissor).build();
 
-            return verificador.verify(token);
+        verificador.verify(token);
 
+        var tokenBanco = tokenRepository.findTokenByToken(token).orElse(null);
+
+        if(tokenBanco==null){
+            throw  new IllegalArgumentException("Token Invalido!");
         }
+
+        return new UsuarioLogado(tokenBanco.getUsuario());
+
+    }
+
 
     private Instant gerarDataExpiracao(){
         var dataAtual = LocalDateTime.now();

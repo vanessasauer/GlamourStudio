@@ -9,13 +9,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +39,10 @@ public class Usuario {
     private EMAIL email;
 
     private String role = "ROLE_USER";
+
+    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o usuário, irá carregar as empresas junto.
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
@@ -50,6 +61,23 @@ public class Usuario {
         this.setSenha(usuario.senha());
         this.setEmail(new EMAIL(usuario.email()));
         this.setRole("ROLE_USER");
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.role));
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+
+        return "";
     }
 
 }
