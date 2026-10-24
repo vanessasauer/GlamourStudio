@@ -15,7 +15,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -43,6 +45,15 @@ public class Usuario implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o usuário, irá carregar as empresas junto.
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresa;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "tb_atuacao",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "especialidade_id")
+    )
+
+    private Set<Especialidade> especialidades = new HashSet<>();
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
