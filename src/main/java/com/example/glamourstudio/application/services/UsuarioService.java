@@ -1,7 +1,9 @@
 package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
+import com.example.glamourstudio.domain.entities.Equipe;
 import com.example.glamourstudio.domain.entities.Usuario;
+import com.example.glamourstudio.domain.repository.EquipeRepository;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import com.example.glamourstudio.domain.valueobject.CPF;
 import com.example.glamourstudio.domain.valueobject.EMAIL;
@@ -12,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Service
 public class UsuarioService {
 
@@ -22,6 +22,9 @@ public class UsuarioService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private EquipeRepository equipeRepository;
 
     @Value("${spring.secretkey}")
     private String secret;
@@ -117,6 +120,30 @@ public class UsuarioService {
         }
         return false;
 
+    }
+
+    public boolean adicionarUsuarioNaEquipe(Long id, EquipeRequest equipeRequest) {
+
+        Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
+        Equipe equipeBanco = equipeRepository.findById(equipeRequest.equipe_id()).orElse(null);
+        if(usuarioBanco!= null && equipeBanco!= null) {
+
+            var equipe =  usuarioBanco.getEquipes().stream()
+                    .anyMatch(u->u.getId().equals(equipeBanco.getId()));
+
+            if(equipe){
+                return true;
+            }else {
+                usuarioBanco.getEquipes().add(equipeBanco);
+
+                usuarioRepository.save(usuarioBanco);
+
+
+                return true;
+            }
+
+        }
+        return false;
 
     }
 

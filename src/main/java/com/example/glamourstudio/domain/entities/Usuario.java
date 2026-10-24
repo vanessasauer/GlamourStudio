@@ -46,14 +46,19 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresa;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
-            name = "tb_atuacao",
+            name = "tb_equipe",
             joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "especialidade_id")
+            inverseJoinColumns = @JoinColumn(name = "equipe_id")
     )
 
-    private Set<Especialidade> especialidades = new HashSet<>();
+    private Set<Equipe> equipes = new HashSet<>();
+
+    public void adicionarUsuarioNaEquipe(Equipe equipe){
+        this.equipes.add(equipe);
+    }
+
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
