@@ -1,5 +1,9 @@
 package com.example.glamourstudio.domain.entities;
 
+import com.example.glamourstudio.application.DTOs.ClienteRequest;
+import com.example.glamourstudio.application.DTOs.EmpresaRequest;
+import com.example.glamourstudio.application.DTOs.EnumStatusEmpresa;
+import com.example.glamourstudio.domain.valueobject.EMAIL;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +29,17 @@ public class Empresa {
 
     @OneToMany(mappedBy = "empresa") //pra apontar a coluna da tabela seguinte, com a chave estrangeira
     private List<Usuario> usuarios;
+
+    private String role = "ROLE_EMPRESA";
+
+    private EnumStatusEmpresa statusEmpresa = EnumStatusEmpresa.ATIVO;
+
+
+    public Empresa(EmpresaRequest empresa) {
+        this.setRazaoSocial(empresa.razaoSocial());
+        this.setCnpj(empresa.cnpj());
+        this.setNomeFantasia(empresa.nomeFantasia());
+        this.setRole("ROLE_EMPRESA");
+    }
 
 }
