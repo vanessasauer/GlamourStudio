@@ -6,7 +6,6 @@ import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.repository.EquipeRepository;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import com.example.glamourstudio.domain.valueobject.CPF;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,7 +88,7 @@ public class UsuarioService {
             if(usuarioBanco!= null ){
                 usuarioBanco.setNome(usuario.nome());
                 usuarioBanco.setCpf(new CPF(usuario.cpf()));
-                usuarioBanco.setEmail(new EMAIL(usuario.email()));
+                usuarioBanco.setEmail(usuario.email());
                 usuarioBanco.setSenha(usuario.senha());
                 usuarioRepository.save(usuarioBanco);
                 return  new UsuarioResponse(usuarioBanco);

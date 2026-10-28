@@ -2,9 +2,7 @@ package com.example.glamourstudio.domain.entities;
 
 import com.example.glamourstudio.application.DTOs.ClienteRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusCliente;
-import com.example.glamourstudio.application.DTOs.UsuarioRequest;
-import com.example.glamourstudio.domain.valueobject.CPF;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
+import com.example.glamourstudio.domain.valueobject.TELEFONE;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +24,10 @@ public class Cliente {
 
     private LocalDate dataNascimento;
 
-    @Embedded
-    private EMAIL email;
+    private String email;
 
-    private String telefone;
+    @Embedded
+    private TELEFONE telefone;
 
     private String role = "ROLE_CLIENTE";
 
@@ -38,8 +36,8 @@ public class Cliente {
     public Cliente(ClienteRequest cliente) {
         this.setNome(cliente.nome());
         this.setDataNascimento(cliente.dataNascimento());
-        this.setEmail(new EMAIL(cliente.email()));
-        this.setTelefone(cliente.telefone());
+        this.setEmail(cliente.email());
+        this.setTelefone(new TELEFONE(cliente.telefone()));
         this.setRole("ROLE_CLIENTE");
     }
 }

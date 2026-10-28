@@ -12,8 +12,8 @@ public record ClienteResponse(Long id, String nome, LocalDate dataNascimento, St
                 clienteEntidade.getId(),
                 clienteEntidade.getNome(),
                 clienteEntidade.getDataNascimento(),
-                clienteEntidade.getEmail().toString(),
-                clienteEntidade.getTelefone(),
+                clienteEntidade.getEmail(),
+                clienteEntidade.getTelefone().toString(),
                 clienteEntidade.getStatusCliente()
         );
     }

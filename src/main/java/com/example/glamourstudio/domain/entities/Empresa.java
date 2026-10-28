@@ -1,9 +1,7 @@
 package com.example.glamourstudio.domain.entities;
 
-import com.example.glamourstudio.application.DTOs.ClienteRequest;
 import com.example.glamourstudio.application.DTOs.EmpresaRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusEmpresa;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

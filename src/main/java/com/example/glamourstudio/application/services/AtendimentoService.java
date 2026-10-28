@@ -2,10 +2,7 @@ package com.example.glamourstudio.application.services;
 
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Atendimento;
-import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.repository.AtendimentoRepository;
-import com.example.glamourstudio.domain.valueobject.CPF;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

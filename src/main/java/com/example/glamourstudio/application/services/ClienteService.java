@@ -3,7 +3,7 @@ package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Cliente;
 import com.example.glamourstudio.domain.repository.ClienteRepository;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
+import com.example.glamourstudio.domain.valueobject.TELEFONE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +38,8 @@ public class ClienteService {
             if(clienteBanco!= null ){
                 clienteBanco.setNome(cliente.nome());
                 clienteBanco.setDataNascimento(cliente.dataNascimento());
-                clienteBanco.setEmail(new EMAIL(cliente.email()));
-                clienteBanco.setTelefone(cliente.telefone());
+                clienteBanco.setEmail(cliente.email());
+                clienteBanco.setTelefone(new TELEFONE(cliente.telefone()));
                 clienteRepository.save(clienteBanco);
                 return  new ClienteResponse(clienteBanco);
             }

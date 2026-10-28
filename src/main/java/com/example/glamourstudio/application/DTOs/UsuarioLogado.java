@@ -2,9 +2,8 @@ package com.example.glamourstudio.application.DTOs;
 
 import com.example.glamourstudio.domain.entities.Usuario;
 import com.example.glamourstudio.domain.valueobject.CPF;
-import com.example.glamourstudio.domain.valueobject.EMAIL;
 
-public record UsuarioLogado(Long id, EMAIL email, CPF cpf,
+public record UsuarioLogado(Long id, String email, CPF cpf,
                             Long empresa_id,
                             java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> authorities) {
     public UsuarioLogado(Usuario usuario){

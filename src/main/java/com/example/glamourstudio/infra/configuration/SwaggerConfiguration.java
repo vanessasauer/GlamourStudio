@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
                 .components(new Components().addSecuritySchemes("bearerAuth",
                         new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
+                                .scheme("bearer")
                                 .bearerFormat("JWT")
                 ))
                 .info(new Info()
