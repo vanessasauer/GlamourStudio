@@ -121,7 +121,7 @@ public class UsuarioService {
 
     }
 
-    public boolean adicionarUsuarioNaEquipe(Long id, EquipeRequest equipeRequest) {
+    public boolean adicionarUsuarioNaEquipe(Long id, AdicionarUsuarioEquipeRequest equipeRequest) {
 
         Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
         Equipe equipeBanco = equipeRepository.findById(equipeRequest.equipe_id()).orElse(null);

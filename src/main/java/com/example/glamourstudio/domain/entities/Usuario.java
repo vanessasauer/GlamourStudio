@@ -7,6 +7,7 @@ import com.example.glamourstudio.domain.valueobject.CPF;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,10 +24,12 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String nome;
@@ -46,7 +49,7 @@ public class Usuario implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "tb_equipe",
+            name = "tb_usuarioEquipe",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "equipe_id")
     )
@@ -54,6 +57,7 @@ public class Usuario implements UserDetails {
     private Set<Equipe> equipes = new HashSet<>();
 
     public void adicionarUsuarioNaEquipe(Equipe equipe){
+
         this.equipes.add(equipe);
     }
 

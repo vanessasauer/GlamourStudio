@@ -115,7 +115,7 @@ public class UsuarioController {
     @PatchMapping("/{id}/equipe")
     @Operation(summary = "Método para adicionar um usuário em uma equipe.",
             description = "Método responsável por vincular um usuário existente a uma equipe pelo ID.")
-    public ResponseEntity<?> adicionarEquipe(@PathVariable Long id, @RequestBody EquipeRequest equipeRequest) {
+    public ResponseEntity<?> adicionarEquipe(@PathVariable Long id, @RequestBody AdicionarUsuarioEquipeRequest equipeRequest) {
 
         boolean retornoEquipe = usuarioService.adicionarUsuarioNaEquipe(id, equipeRequest);
 
