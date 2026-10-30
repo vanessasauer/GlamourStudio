@@ -24,6 +24,13 @@ export default function Sidebar(){
                 </Link>
 
                 <Link 
+                href="/agenda" 
+                className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                >
+                    Minha agenda
+                </Link>
+
+                <Link 
                     href="/atendimentos" 
                     className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
                 >

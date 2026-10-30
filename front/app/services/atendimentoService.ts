@@ -1,4 +1,4 @@
-import { Atendimento } from "../types/atendimento";
+import { Atendimento, PainelFaturamento } from "../types/atendimento";
 import api from "./api";
 
 
@@ -12,6 +12,23 @@ export async function buscarListaAtendimentos() : Promise<Atendimento[]> {
     }
 
     return[];
+    
+}
+
+export async function buscarMinhaAgenda(inicio?:string, fim?:string) : Promise<Atendimento[]> {
+const dados = await
+api.get<Atendimento[]>("http://localhost:8080/atendimento/minha-agenda", {params:{inicio: inicio || undefined, fim: fim || undefined}});
+if(dados.status == 200){
+return dados.data;
+}
+return[];
+}
+
+export async function buscarPainelMensal() : Promise<PainelFaturamento> {
+
+    const dados = await api.get<PainelFaturamento>("http://localhost:8080/atendimento/painel");
+
+    return dados.data;
     
 }
 

@@ -5,10 +5,12 @@ import com.example.glamourstudio.application.services.AtendimentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -97,6 +99,22 @@ public class AtendimentoController {
 
         return  ResponseEntity.notFound().build();
 
+    }
+
+    @GetMapping("/minha-agenda")
+    @Operation(summary = "Agenda do profissional logado por período.", description = "Retorna os atendimentos do período informado (ou de hoje, se não informar) em que o usuário logado é o profissional.")
+    public ResponseEntity<List<AtendimentoResponse>> minhaAgenda(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim){
+        return ResponseEntity.ok(atendimentoService.listarMinhaAgenda(inicio, fim));
+    }
+
+    @GetMapping("/painel")
+    @Operation(summary = "Painel de faturamento do mês do profissional logado.",
+            description = "Retorna a soma dos atendimentos ATENDIDO do usuário logado no mês vigente.")
+    public ResponseEntity<PainelFaturamentoResponse> painel(){
+
+        return ResponseEntity.ok(atendimentoService.gerarPainelMensal());
     }
 
 
