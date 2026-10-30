@@ -2,8 +2,6 @@
 
 import { atualizarStatusAtendimento, buscarListaAtendimentos, deletarAtendimento } from "@/app/services/atendimentoService";
 import { Atendimento } from "@/app/types/atendimento";
-import { Usuario } from "@/app/types/usuario";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -53,9 +51,9 @@ export default function Atendimentos(){
 
     }
 
-     const handleAlterarStatusAtendimento = async(atendimento:Atendimento) =>{
+    const handleAlterarStatusAtendimento = async(atendimento:Atendimento) =>{
 
-       await atualizarStatusAtendimento(atendimento);
+        await atualizarStatusAtendimento(atendimento);
 
         carregarDados();
 
@@ -65,7 +63,7 @@ export default function Atendimentos(){
 
         <div className="w-full bg-[#F8F5F0] p-6 md:p-8 font-sans">
 
-            <div className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
+            <div className="mx-auto mb-8 flex w-full max-w-6xl items-center justify-between">
 
                 <h1 className="text-3xl font-semibold text-[#5C5145]">
                     Gestão de atendimentos
@@ -80,7 +78,7 @@ export default function Atendimentos(){
 
             </div>
 
-            <div className="mx-auto w-full max-w-5xl">
+            <div className="mx-auto w-full max-w-6xl">
 
                 <div className="overflow-hidden rounded-2xl border border-[#E8DED0] bg-[#FFFDF9] shadow-sm">
 
@@ -90,31 +88,31 @@ export default function Atendimentos(){
 
                             <tr>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Código
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Cliente
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Profissional
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Data e Hora
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Serviço
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Status
                                 </th>
 
-                                <th className="px-6 py-4 text-sm font-semibold text-[#5C5145]">
+                                <th className="px-4 py-4 text-sm font-semibold text-[#5C5145]">
                                     Ações
                                 </th>
 
@@ -131,27 +129,27 @@ export default function Atendimentos(){
                                     className="border-t border-[#E8DED0] transition hover:bg-[#F5EFE7]"
                                 >
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
                                         {atendimento.id}
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm font-medium text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm font-medium text-[#6B6054]">
                                         {atendimento.cliente}
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
                                         {atendimento.profissional}
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
                                         {atendimento.dataHora}
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
                                         {atendimento.servico}
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
 
                                         <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
@@ -167,9 +165,9 @@ export default function Atendimentos(){
 
                                     </td>
 
-                                    <td className="px-6 py-4 text-sm text-[#6B6054]">
+                                    <td className="px-4 py-4 text-sm text-[#6B6054]">
 
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 whitespace-nowrap">
 
                                             <Link
                                                 href={`/atendimentos/${atendimento.id}/editar`}
@@ -179,12 +177,12 @@ export default function Atendimentos(){
                                             </Link>
 
                                             <button
-                                onClick={()=> handleAlterarStatusAtendimento(atendimento)}
-                                className="inline-flex items-center gap-2 rounded-lg border border-[#C9D7C8] bg-[#F1F6F0] px-3.5 py-2 text-sm font-semibold text-[#5F745C] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#E7F0E5] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#D4E1D2]"
->
-                                     <span className="h-2 w-2 rounded-full bg-[#7E9C79]"></span>
-                                         Status
-                                        </button>
+                                                onClick={()=> handleAlterarStatusAtendimento(atendimento)}
+                                                className="inline-flex items-center gap-2 rounded-lg border border-[#C9D7C8] bg-[#F1F6F0] px-3 py-1.5 text-sm font-medium text-[#5F745C] transition-all duration-200 hover:bg-[#E7F0E5]"
+                                            >
+                                                <span className="h-2 w-2 rounded-full bg-[#7E9C79]"></span>
+                                                Status
+                                            </button>
 
                                             <button
                                                 onClick={()=> handleDeletarAtendimento(atendimento)}
@@ -207,7 +205,7 @@ export default function Atendimentos(){
 
                                     <td
                                         colSpan={7}
-                                        className="px-6 py-12 text-center text-[#8A7D70]"
+                                        className="px-4 py-12 text-center text-[#8A7D70]"
                                     >
                                         Nenhum atendimento encontrado!
                                     </td>

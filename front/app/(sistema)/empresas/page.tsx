@@ -1,5 +1,7 @@
 "use client"
 
+import { atualizarStatusEmpresa, buscarListaEmpresas, deletarEmpresa } from "@/app/services/empresaService";
+import { Empresa } from "@/app/types/empresa";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -70,7 +72,7 @@ export default function Empresas(){
                 </h1>
 
                 <Link
-                    href="/usuarios/novo"
+                    href="/empresas/novo"
                     className="rounded-lg bg-[#B9A58D] px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-[#A58F76] shadow-sm"
                 >
                     Novo
@@ -144,7 +146,7 @@ export default function Empresas(){
                                     <td className="px-6 py-4 text-sm text-[#6B6054]">
                                         <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
-                                                empresa.statusEmpresa === "BLOQUEADO"
+                                                empresa.statusEmpresa === "INATIVO"
                                                     ? "bg-amber-50 text-amber-700"
                                                     : empresa.statusEmpresa === "ATIVO"
                                                     ? "bg-emerald-50 text-emerald-700"

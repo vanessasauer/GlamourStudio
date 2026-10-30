@@ -5,7 +5,7 @@ import api from "./api";
 
 export async function buscarListaClientes() : Promise<Cliente[]> {
 
-    const dados = await api.get<Cliente[]>("http://localhost:8080/clientes");
+    const dados = await api.get<Cliente[]>("http://localhost:8080/cliente");
 
     if(dados.status == 200){
         return dados.data;
@@ -17,7 +17,7 @@ export async function buscarListaClientes() : Promise<Cliente[]> {
 
 export async function deletarCliente(id:number) : Promise<number> {
 
-   var dados = await api.delete('http://localhost:8080/clientes/'+id+'/excluir');
+   var dados = await api.delete('http://localhost:8080/cliente/'+id+'/excluir');
 
     return dados.status; 
 }
@@ -28,16 +28,16 @@ export async function atualizarStatusCliente(cliente:Cliente) : Promise<void> {
 
     if(cliente.statusCliente ==="ATIVO"){
 
-        novoStatus = {status:"BLOQUEADO"}
+        novoStatus = {statusCliente:"INATIVO"}
 
     }else{
 
-        novoStatus = {status:"ATIVO"}
+        novoStatus = {statusCliente:"ATIVO"}
 
     }
 
     var dadosRetorno = await  
-    api.patch('http://localhost:8080/clientes/'+cliente.id+'/status',novoStatus);
+    api.patch('http://localhost:8080/cliente/'+cliente.id+'/status',novoStatus);
 
     if(dadosRetorno.status==200){
 
@@ -54,20 +54,20 @@ export async function atualizarStatusCliente(cliente:Cliente) : Promise<void> {
 }
 
 export async function consultaClientePorId(id:number):Promise<Cliente>{
-    const valorClienteBack = await api.get<Cliente>('http://localhost:8080/clientes/'+id);
+    const valorClienteBack = await api.get<Cliente>('http://localhost:8080/cliente/'+id);
     return valorClienteBack.data;
 
 }
 
 export async function atualizarCliente(cliente:Cliente): Promise<number> {
     var dadosRetorno = await
-    api.put<number>('http://localhost:8080/clientes/'+cliente.id, cliente);
+    api.put<number>('http://localhost:8080/cliente/'+cliente.id, cliente);
     return dadosRetorno.data;
     
 }
 
 export async function  salvarCliente (cliente:Cliente): Promise<number>{
     var dadosRetorno = await  
-    api.post<number>('http://localhost:8080/clientes',cliente);
+    api.post<number>('http://localhost:8080/cliente',cliente);
     return dadosRetorno.data;
 }

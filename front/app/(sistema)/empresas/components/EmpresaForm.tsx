@@ -1,13 +1,12 @@
 "use client"
-import { atualizarCliente, salvarCliente } from "@/app/services/clienteService";
-import { Cliente, ClienteFormProps } from "@/app/types/cliente";
+
+import { atualizarEmpresa, salvarEmpresa } from "@/app/services/empresaService";
 import { Empresa, EmpresaFormProps } from "@/app/types/empresa";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function EmpresasForm({empresaExistente}:EmpresaFormProps) {
+export default function EmpresaForm({empresaExistente}:EmpresaFormProps) {
     const router = useRouter();
 
 const  [empresa, setEmpresa] = useState<Empresa>(
@@ -69,15 +68,15 @@ const handlerSalvar = async (formdata : FormData) =>{
                 <div className="space-y-2">
 
                     <label className="block text-sm font-medium text-[#6B6054]">
-                        Nome do Cliente:
+                        Razão Social:
                     </label>
 
                     <input
-                        name="nome"
-                        value = {cliente.nome}
+                        name="razaoSocial"
+                        value = {empresa.razaoSocial}
                         required 
-                        onChange={(e)=> handlerChange('nome', e.target.value)}
-                        placeholder="Maria da Silva"
+                        onChange={(e)=> handlerChange('razaoSocial', e.target.value)}
+                        placeholder="Estúdio Glamour LTDA"
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -87,15 +86,15 @@ const handlerSalvar = async (formdata : FormData) =>{
                 <div className="space-y-2">
 
                     <label className="block text-sm font-medium text-[#6B6054]">
-                        Data de Nascimento:
+                        CNPJ:
                     </label>
 
                     <input
-                        name="dataNascimento"
-                        value = {cliente.dataNascimento}
+                        name="cnpj"
+                        value = {empresa.cnpj}
                         required
-                        onChange={(e)=> handlerChange('dataNascimento', e.target.value)}
-                        placeholder="2000-01-01"
+                        onChange={(e)=> handlerChange('cnpj', e.target.value)}
+                        placeholder="00.000.000/0000-00"
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -105,33 +104,15 @@ const handlerSalvar = async (formdata : FormData) =>{
                 <div className="space-y-2">
 
                     <label className="block text-sm font-medium text-[#6B6054]">
-                        Email:
+                        Nome Fantasia:
                     </label>
 
                     <input
-                        name="email"
-                        value = {cliente.email}
+                        name="nomeFantasia"
+                        value = {empresa.nomeFantasia}
                         required
-                        onChange={(e)=> handlerChange('email', e.target.value)}
-                        placeholder="maria.silva@example.com"
-                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
-                    >
-                    </input>
-
-                </div>
-
-                <div className="space-y-2">
-
-                    <label className="block text-sm font-medium text-[#6B6054]">
-                        Telefone:
-                    </label>
-
-                    <input
-                        name="telefone"
-                        value = {cliente.telefone}
-                        required
-                        onChange={(e)=> handlerChange('telefone', e.target.value)}
-                        placeholder="(11) 99999-9999"
+                        onChange={(e)=> handlerChange('nomeFantasia', e.target.value)}
+                        placeholder="Salão de beleza"
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
@@ -144,7 +125,7 @@ const handlerSalvar = async (formdata : FormData) =>{
             <div className="flex items-center justify-end space-x-4 pt-4 border-t border-[#E8DED0]">
 
                 <Link
-                    href="/clientes"
+                    href="/empresas"
                     className="px-5 py-2.5 bg-[#EFE7DC] hover:bg-[#E8DED0] text-[#6B6054] hover:text-[#4F463D] font-medium text-sm rounded-xl transition-all duration-200 text-center border border-[#D8CBBB]"
                 >
                     Cancelar

@@ -43,6 +43,20 @@ export default function Sidebar(){
                     >
                         Serviços
                     </Link>
+
+                    <Link 
+                        href="/equipes" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Equipes
+                    </Link>
+
+                    <Link 
+                        href="/empresas" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Empresas
+                    </Link>
                 
                 <Link 
                     href="/usuarios" 

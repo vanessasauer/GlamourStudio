@@ -3,6 +3,8 @@ import { Empresa } from "@/app/types/empresa";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import EmpresaForm from "../../components/EmpresaForm";
+import { consultaEmpresaPorId } from "@/app/services/empresaService";
 
 export default function EditarEmpresa(){
 
@@ -59,7 +61,7 @@ export default function EditarEmpresa(){
                 </div>
 
                 <Link
-                    href="/usuarios"
+                    href="/empresas"
                     className="inline-flex items-center justify-center text-sm font-medium text-[#6B6054] hover:text-[#4F463D] bg-[#EFE7DC] hover:bg-[#E8DED0] border border-[#D8CBBB] px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm w-full sm:w-auto"
                 >
                     &larr; Voltar para Listagem
@@ -69,7 +71,7 @@ export default function EditarEmpresa(){
 
             <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
 
-                <EmpresasForm empresaExistente={empresa}/>
+                <EmpresaForm empresaExistente={empresa}/>
 
             </div>
 

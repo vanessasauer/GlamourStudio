@@ -5,7 +5,7 @@ import api from "./api";
 
 export async function buscarListaServicos() : Promise<Servico[]> {
 
-    const dados = await api.get<Servico[]>("http://localhost:8080/servicos");
+    const dados = await api.get<Servico[]>("http://localhost:8080/servico");
 
     if(dados.status == 200){
         return dados.data;
@@ -17,7 +17,7 @@ export async function buscarListaServicos() : Promise<Servico[]> {
 
 export async function deletarServico(id:number) : Promise<number> {
 
-   var dados = await api.delete('http://localhost:8080/servicos/'+id+'/excluir');
+   var dados = await api.delete('http://localhost:8080/servico/'+id+'/excluir');
 
     return dados.status; 
 }
@@ -28,11 +28,11 @@ export async function atualizarStatusServico(servico:Servico) : Promise<void> {
 
     if(servico.statusServico ==="ATIVO"){
 
-        novoStatus = {status:"BLOQUEADO"}
+        novoStatus = {statusServico:"INATIVO"}
 
     }else{
 
-        novoStatus = {status:"ATIVO"}
+        novoStatus = {statusServico:"ATIVO"}
 
     }
 
@@ -54,20 +54,20 @@ export async function atualizarStatusServico(servico:Servico) : Promise<void> {
 }
 
 export async function consultaServicoPorId(id:number):Promise<Servico>{
-    const valorServicoBack = await api.get<Servico>('http://localhost:8080/servicos/'+id);
+    const valorServicoBack = await api.get<Servico>('http://localhost:8080/servico/'+id);
     return valorServicoBack.data;
 
 }
 
 export async function atualizarServico(servico:Servico): Promise<number> {
     var dadosRetorno = await
-    api.put<number>('http://localhost:8080/servicos/'+servico.id, servico);
+    api.put<number>('http://localhost:8080/servico/'+servico.id, servico);
     return dadosRetorno.data;
     
 }
 
 export async function  salvarServico (servico:Servico): Promise<number>{
     var dadosRetorno = await  
-    api.post<number>('http://localhost:8080/servicos',servico);
+    api.post<number>('http://localhost:8080/servico',servico);
     return dadosRetorno.data;
 }
