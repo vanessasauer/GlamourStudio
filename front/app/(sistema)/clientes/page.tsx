@@ -1,7 +1,7 @@
 "use client"
 
+import { atualizarStatusCliente, buscarListaClientes, deletarCliente } from "@/app/services/clienteService";
 import { Cliente } from "@/app/types/cliente";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -19,9 +19,9 @@ export default function Clientes(){
 
         try{
 
-            const dados = await axios.get<Cliente[]>("http://localhost:8080/cliente");
+            const dados = await buscarListaClientes()
 
-            setClientes(dados.data)
+            setClientes(dados)
 
         } catch (error){
 
@@ -33,16 +33,15 @@ export default function Clientes(){
 
     const handleDeletarCliente = async(cliente:Cliente) =>{
 
-        var dadosRetorno = await 
-        axios.delete('http://localhost:8080/cliente/'+cliente.id+'/excluir');
+        var dadosRetorno = await deletarCliente(cliente.id || 0);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno == 200){
 
             alert("Excluído com sucesso!");
 
         } else {
 
-            alert(dadosRetorno.data);
+            alert("Erro ao excluir clientes!");
 
             return;
 
@@ -54,32 +53,7 @@ export default function Clientes(){
 
     const handleAlterarStatusCliente = async(cliente:Cliente) =>{
 
-        var novoStatus = {};
-
-        if(cliente.statusCliente ==="ATIVO"){
-
-            novoStatus = {statusCliente:"INATIVO"}
-
-        }else{
-
-            novoStatus = {statusCliente:"ATIVO"}
-
-        }
-
-        var dadosRetorno = await  
-        axios.patch('http://localhost:8080/cliente/'+cliente.id+'/status',novoStatus);
-
-        if(dadosRetorno.status==200){
-
-            alert("Atulizado status com sucesso!");
-
-        }else{
-
-            alert(dadosRetorno.data);
-
-            return;
-
-        }
+        await atualizarStatusCliente(cliente);
 
         carregarDados();
 

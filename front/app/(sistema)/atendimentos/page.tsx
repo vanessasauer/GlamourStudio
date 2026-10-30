@@ -1,6 +1,8 @@
 "use client"
 
+import { atualizarStatusAtendimento, buscarListaAtendimentos, deletarAtendimento } from "@/app/services/atendimentoService";
 import { Atendimento } from "@/app/types/atendimento";
+import { Usuario } from "@/app/types/usuario";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,9 +21,9 @@ export default function Atendimentos(){
 
         try{
 
-            const dados = await axios.get<Atendimento[]>("http://localhost:8080/atendimento");
+            const dados = await buscarListaAtendimentos()
 
-            setAtendimentos(dados.data)
+            setAtendimentos(dados)
 
         } catch (error){
 
@@ -33,16 +35,15 @@ export default function Atendimentos(){
 
     const handleDeletarAtendimento = async(atendimento:Atendimento) =>{
 
-        var dadosRetorno = await 
-        axios.delete('http://localhost:8080/atendimento/'+atendimento.id+'/excluir');
+        var dadosRetorno = await deletarAtendimento(atendimento.id || 0);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno == 200){
 
             alert("Atendimento cancelado com sucesso!");
 
         } else {
 
-            alert(dadosRetorno.data);
+            alert("Erro ao excluir atendimentos!");
 
             return;
 
@@ -54,32 +55,7 @@ export default function Atendimentos(){
 
      const handleAlterarStatusAtendimento = async(atendimento:Atendimento) =>{
 
-        var novoStatus = {};
-
-        if(atendimento.statusAtendimento ==="AGENDADO"){
-
-            novoStatus = {statusAtendimento:"ATENDIDO"}
-
-        }else{
-
-            novoStatus = {statusAtendimento:"AGENDADO"}
-
-        }
-
-        var dadosRetorno = await  
-        axios.patch('http://localhost:8080/atendimento/'+atendimento.id+'/status',novoStatus);
-
-        if(dadosRetorno.status==200){
-
-            alert("Atulizado status com sucesso!");
-
-        }else{
-
-            alert(dadosRetorno.data);
-
-            return;
-
-        }
+       await atualizarStatusAtendimento(atendimento);
 
         carregarDados();
 

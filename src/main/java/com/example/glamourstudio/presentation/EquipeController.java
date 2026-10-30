@@ -2,7 +2,6 @@ package com.example.glamourstudio.presentation;
 
 
 import com.example.glamourstudio.application.DTOs.*;
-import com.example.glamourstudio.application.services.EmpresaService;
 import com.example.glamourstudio.application.services.EquipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

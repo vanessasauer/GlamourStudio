@@ -1,4 +1,5 @@
 "use client"
+import { atualizarCliente, salvarCliente } from "@/app/services/clienteService";
 import { Cliente, ClienteFormProps } from "@/app/types/cliente";
 import axios from "axios";
 import Link from "next/link";
@@ -33,23 +34,23 @@ const handlerChange = ( campo : 'nome' | 'dataNascimento' | 'email' | 'telefone'
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(clienteExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/cliente/'+cliente.id, cliente);
+        var dadosRetorno = await atualizarCliente(cliente);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno){
             alert("Cliente foi salvo com sucesso!");
         } else {
-            alert(dadosRetorno.data);
+            alert("Erro ao atualizar o cliente!");
     
             return;
         }
 
     }else{
-    var dadosRetorno = await axios.post<number>('http://localhost:8080/cliente',cliente)
+    var dadosRetorno = await salvarCliente(cliente);
 
-    if(dadosRetorno.status==200){
+    if(dadosRetorno){
         alert("Cliente foi salvo com sucesso!");
     } else {
-        alert(dadosRetorno.data);
+        alert("Erro ao salvar Cliente!");
 
         return;
     }

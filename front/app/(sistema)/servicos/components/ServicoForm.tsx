@@ -1,6 +1,6 @@
 "use client"
+import { atualizarServico, salvarServico } from "@/app/services/servicoService";
 import { Servico, ServicoFormProps } from "@/app/types/servico";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,23 +33,23 @@ const handlerChange = ( campo : 'nome' | 'descricao' | 'valor' | 'duracaoMinutos
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(servicoExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/servico/'+servico.id, servico);
+        var dadosRetorno = await atualizarServico(servico)
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno){
             alert("Serviço foi salvo com sucesso!");
         } else {
-            alert(dadosRetorno.data);
+            alert("Erro ao atualizar o serviço!");
     
             return;
         }
 
     }else{
-    var dadosRetorno = await axios.post<number>('http://localhost:8080/servico',servico)
+    var dadosRetorno = await salvarServico(servico)
 
-    if(dadosRetorno.status==200){
+    if(dadosRetorno){
         alert("Serviço foi salvo com sucesso!");
     } else {
-        alert(dadosRetorno.data);
+        alert("Erro ao salvar Serviço!");
 
         return;
     }

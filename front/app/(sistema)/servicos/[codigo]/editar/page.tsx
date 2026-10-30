@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import ServicoForm from "../../components/ServicoForm";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Servico } from "@/app/types/servico";
+import { consultaServicoPorId } from "@/app/services/servicoService";
 
 export default function EditarServico(){
 
@@ -24,10 +24,10 @@ export default function EditarServico(){
 
     const buscarDados = async() =>{
 
-        const valorServicoBack = await axios.get<Servico>('http://localhost:8080/servico/'+codigo);
+        const valorServicoBack = await consultaServicoPorId(codigo);
 
-        if(valorServicoBack.status==200){
-            setServico(valorServicoBack.data);
+        if(valorServicoBack.statusServico){
+            setServico(valorServicoBack);
         }else{
             router.push("/servicos")
         }

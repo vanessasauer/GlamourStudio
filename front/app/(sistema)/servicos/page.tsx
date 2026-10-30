@@ -1,7 +1,7 @@
 "use client"
 
+import { atualizarStatusServico, buscarListaServicos, deletarServico } from "@/app/services/servicoService";
 import { Servico } from "@/app/types/servico";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -19,9 +19,9 @@ export default function Servicos(){
 
         try{
 
-            const dados = await axios.get<Servico[]>("http://localhost:8080/servico");
+            const dados = await buscarListaServicos()
 
-            setServicos(dados.data)
+            setServicos(dados)
 
         } catch (error){
 
@@ -35,16 +35,15 @@ export default function Servicos(){
 
     const handleDeletarServico = async(servico:Servico) =>{
 
-        var dadosRetorno = await 
-        axios.delete('http://localhost:8080/servico/'+servico.id+'/excluir');
+        var dadosRetorno = await deletarServico(servico.id || 0);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno == 200){
 
             alert("Excluído com sucesso!");
 
         } else {
 
-            alert(dadosRetorno.data);
+            alert("Erro ao excluir serviços!");
 
             return;
 
@@ -56,32 +55,7 @@ export default function Servicos(){
 
     const handleAlterarStatusServico = async(servico:Servico) =>{
 
-        var novoStatus = {};
-
-        if(servico.statusServico ==="ATIVO"){
-
-            novoStatus = {statusServico:"INATIVO"}
-
-        }else{
-
-            novoStatus = {statusServico:"ATIVO"}
-
-        }
-
-        var dadosRetorno = await  
-        axios.patch('http://localhost:8080/servico/'+servico.id+'/status',novoStatus);
-
-        if(dadosRetorno.status==200){
-
-            alert("Atulizado status com sucesso!");
-
-        }else{
-
-            alert(dadosRetorno.data);
-
-            return;
-
-        }
+       await atualizarStatusServico(servico);
 
         carregarDados();
 

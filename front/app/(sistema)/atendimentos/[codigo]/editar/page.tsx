@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import AtendimentosForm from "../../components/AtendimentosForm";
 import { useEffect, useState } from "react";
 import { Atendimento } from "@/app/types/atendimento";
-import axios from "axios";
+import { consultaAtendimentoPorId } from "@/app/services/atendimentoService";
 
 export default function EditarAtendimento(){
 
@@ -24,10 +24,10 @@ export default function EditarAtendimento(){
 
     const buscarDados = async() =>{
 
-        const valorAtendimentoBack = await axios.get<Atendimento>('http://localhost:8080/atendimento/'+codigo);
+        const valorAtendimentoBack = await consultaAtendimentoPorId(codigo);
 
-        if(valorAtendimentoBack.status==200){
-            setAtendimento(valorAtendimentoBack.data);
+        if(valorAtendimentoBack.statusAtendimento){
+            setAtendimento(valorAtendimentoBack);
         }else{
             router.push("/atendimentos")
         }

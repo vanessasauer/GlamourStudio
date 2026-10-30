@@ -1,6 +1,6 @@
 "use client"
+import { atualizarAtendimento, salvarAtendimento } from "@/app/services/atendimentoService";
 import { Atendimento, AtendimentoFormProps } from "@/app/types/atendimento";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,23 +34,23 @@ const handlerChange = ( campo : 'cliente' | 'profissional' | 'dataHora' | 'servi
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(atendimentoExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/atendimento/'+atendimento.id, atendimento);
+        var dadosRetorno = await atualizarAtendimento(atendimento);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno){
             alert("Atendimento foi salvo com sucesso!");
         } else {
-            alert(dadosRetorno.data);
+            alert("Erro ao atualizar atendimento!");
     
             return;
         }
 
     }else{
-    var dadosRetorno = await axios.post<number>('http://localhost:8080/atendimento',atendimento)
+    var dadosRetorno = await salvarAtendimento(atendimento);
 
-    if(dadosRetorno.status==200){
+    if(dadosRetorno){
         alert("Atendimento foi salvo com sucesso!");
     } else {
-        alert(dadosRetorno.data);
+        alert("Erro ao salvar atendimento!");
 
         return;
     }

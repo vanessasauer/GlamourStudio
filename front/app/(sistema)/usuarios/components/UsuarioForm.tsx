@@ -1,7 +1,7 @@
 'use client'
 
+import { atualizarUsuario, salvarUsuario } from "@/app/services/usuarioService";
 import { Usuario, UsuarioFormProps } from "@/app/types/usuario";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -35,23 +35,22 @@ const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha', valor:string
 const handlerSalvar = async (formdata : FormData) =>{
 
     if(usuarioExistente){
-        var dadosRetorno = await axios.put<number>('http://localhost:8080/usuarios/'+usuario.id, usuario);
+        var dadosRetorno = await atualizarUsuario(usuario);
 
-        if(dadosRetorno.status==200){
+        if(dadosRetorno){
             alert("Usuário foi salvo com sucesso!");
         } else {
-            alert(dadosRetorno.data);
+            alert("Erro ao atualizar o usuário!");
     
             return;
         }
 
     }else{
-    var dadosRetorno = await axios.post<number>('http://localhost:8080/usuarios',usuario)
-
-    if(dadosRetorno.status==200){
+    var dadosRetorno = await salvarUsuario(usuario);
+    if(dadosRetorno){
         alert("Usuário foi salvo com sucesso!");
-    } else {
-        alert(dadosRetorno.data);
+    }else{
+        alert("Erro ao salvar Usuário!");
 
         return;
     }
