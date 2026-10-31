@@ -1,36 +1,44 @@
 'use client'
-
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { LoginResponse } from "../types/auth";
 import Cookies from "js-cookie";
+import { loginBack } from "../services/authService";
+import { useDispatch } from "react-redux";
+import { buscarUsuarioLogado } from "../services/usuarioService";
+import { login } from "../redux/slices/authSlice";
 
 
 
 export default function Login(){
     const router = useRouter();
+    const dispatch =useDispatch();
 
     const handlerLogin = async(formData:FormData) =>{
        try{ 
         debugger;
-
         const emailTela = formData.get("email")?.toString() ?? "";
         const senhaTela = formData.get("senha")?.toString() ?? "";
 
-    var loginResposta = await axios.post<LoginResponse>("http://localhost:8080/auth/login",
-    {email:emailTela,senha:senhaTela});
+    var loginResposta = await loginBack(emailTela,senhaTela);
 
-    if(loginResposta.status == 200){
-        Cookies.set('token',loginResposta.data.token,{secure: true, expires: 7});
-        router.push("/home")
-    }else{
-        alert("Login ou senha Inválidos!")
-    } 
-} catch (error) {
-        alert("Login ou senha Inválidos!")  
-    }
+    if(loginResposta != null){
+        Cookies.set('token',loginResposta.token,{secure: true, expires: 7});
+        var usuarioLogado = await buscarUsuarioLogado();
 
-    }
+        dispatch(login(
+         {
+             token:loginResposta.token,
+             usuario:{...usuarioLogado}
+         }
+         ));
+         router.push("/home")
+     }else{
+         alert("Login ou senha Invalido!")
+     }
+ } catch (error) {
+     alert("Login ou senha Invalido!")
+ }
+}
+
 
     return(<>
 

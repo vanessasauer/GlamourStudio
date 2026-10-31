@@ -28,6 +28,10 @@ public class Equipe {
 
     private String descricao;
 
+    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar as equipes, irá carregar as empresas junto.
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
+
     @ManyToMany(mappedBy = "equipes")
     private Set<Usuario> profissionais = new HashSet<>();
 

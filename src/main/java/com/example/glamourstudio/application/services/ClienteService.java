@@ -15,10 +15,22 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     public List<ClienteResponse> listarTodosClientesTable() {
 
-        return clienteRepository.findAll()
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return clienteRepository.findAll()
+                    .stream()
+                    .map(ClienteResponse::new)
+                    .toList();
+        }
+
+        return clienteRepository.getClientesByEmpresa_Id(usuarioLogado.empresa_id())
                 .stream()
                 .map(ClienteResponse::new)
                 .toList();

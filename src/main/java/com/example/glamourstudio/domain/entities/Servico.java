@@ -4,10 +4,7 @@ package com.example.glamourstudio.domain.entities;
 import com.example.glamourstudio.application.DTOs.CriarServicoRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusServico;
 import com.example.glamourstudio.application.DTOs.ServicoRequest;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +32,10 @@ public class Servico{
     private String role = "ROLE_SERVICO";
 
     private EnumStatusServico statusServico = EnumStatusServico.ATIVO;
+
+    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o serviço, irá carregar as empresas junto.
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
 
     public Servico(CriarServicoRequest criarServicoRequest) {
         this.setNome(criarServicoRequest.nome());

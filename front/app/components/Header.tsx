@@ -1,4 +1,12 @@
+'use client'
+import { useDispatch } from "react-redux";
+import { store } from "../redux/store";
+import { logout } from "../redux/slices/authSlice";
+
 export default function Header(){
+
+        const usuario = store.getState().auth.usuario;
+        const dispatch = useDispatch();
 
     return (
         <header className="w-full bg-[#FFFDF9] border-b border-[#E8DED0] shadow-sm">
@@ -26,15 +34,16 @@ export default function Header(){
 
                     <span 
                     className="text-[#5C5145] font-medium text-sm sm:text-base">
-
-                        Usuário Vanessa Sauer
-                    </span>
+                        {usuario? usuario.nome.toLocaleUpperCase() :'Usuário não identificado!'}</span>
 
                 </div>
 
                 <button 
+                 onClick={()=>{
+                    dispatch(logout());
+                }
+                }
                 className="px-4 py-2 bg-[#B9A58D] hover:bg-[#A58F76] text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D8CBBB]">
-
                     Sair
                 </button>
 

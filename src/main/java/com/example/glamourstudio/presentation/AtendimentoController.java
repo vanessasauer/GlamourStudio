@@ -102,7 +102,8 @@ public class AtendimentoController {
     }
 
     @GetMapping("/minha-agenda")
-    @Operation(summary = "Agenda do profissional logado por período.", description = "Retorna os atendimentos do período informado (ou de hoje, se não informar) em que o usuário logado é o profissional.")
+    @Operation(summary = "Agenda do profissional logado por período.",
+            description = "Retorna os atendimentos do período informado (ou de hoje, se não informar) em que o usuário logado é o profissional.")
     public ResponseEntity<List<AtendimentoResponse>> minhaAgenda(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim){

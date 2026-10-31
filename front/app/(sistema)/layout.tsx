@@ -1,8 +1,22 @@
+import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export default function SistemaLayout({children}){
+
+    const usuario = useSelector((state:RootState)=> state.auth.usuario);
+
+    const router = useRouter();
+
+    useEffect(()=>{
+        if(usuario == null){
+            router.push("/login");
+        }
+    })
 
     return (
 

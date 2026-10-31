@@ -14,14 +14,27 @@ public class EquipeService {
     @Autowired
     private EquipeRepository equipeRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     public List<EquipeResponse> listarTodasEquipesTable() {
 
-        return equipeRepository.findAll()
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return equipeRepository.findAll()
+                    .stream()
+                    .map(EquipeResponse::new)
+                    .toList();
+        }
+
+        return equipeRepository.getEquipesByEmpresa_Id(usuarioLogado.empresa_id())
                 .stream()
                 .map(EquipeResponse::new)
                 .toList();
     }
+
 
     public EquipeResponse salvarEquipe(EquipeRequest equipe, Long id) {
 

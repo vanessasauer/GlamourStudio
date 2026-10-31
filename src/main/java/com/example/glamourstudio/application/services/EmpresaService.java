@@ -14,10 +14,21 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
 
     public List<EmpresaResponse> listarTodasEmpresasTable() {
 
-        return empresaRepository.findAll()
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return empresaRepository.findAll()
+                    .stream()
+                    .map(EmpresaResponse::new)
+                    .toList();
+        }
+
+        return empresaRepository.findById(usuarioLogado.empresa_id())
                 .stream()
                 .map(EmpresaResponse::new)
                 .toList();

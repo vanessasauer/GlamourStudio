@@ -3,10 +3,7 @@ package com.example.glamourstudio.domain.entities;
 import com.example.glamourstudio.application.DTOs.AtendimentoRequest;
 import com.example.glamourstudio.application.DTOs.EnumStatusAtendimento;
 import com.example.glamourstudio.application.DTOs.ServicoRequest;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +37,9 @@ public class Atendimento {
     // valor cobrado neste atendimento (fica fixo mesmo se o preço do serviço mudar depois)
     private BigDecimal valor;
 
+    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o serviço, irá carregar as empresas junto.
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
 
     private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.AGENDADO;
 

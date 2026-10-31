@@ -25,17 +25,25 @@ public class AtendimentoService {
     private UsuarioService usuarioService;
 
 
-
     public List<AtendimentoResponse> listarTodosAtendimentosTable() {
 
-        return atendimentoRepository.findAll()
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return atendimentoRepository.findAll()
+                    .stream()
+                    .map(AtendimentoResponse::new)
+                    .toList();
+        }
+
+        return atendimentoRepository.getAtendimentosByEmpresa_Id(usuarioLogado.empresa_id())
                 .stream()
                 .map(AtendimentoResponse::new)
                 .toList();
     }
 
     // Agenda do profissional logado num período (o id vem do token, nunca do front).
-// Sem datas, mostra HOJE. Com só uma das datas, mostra aquele dia.
+    // Sem datas, mostra HOJE. Com só uma das datas, mostra aquele dia.
     public List<AtendimentoResponse> listarMinhaAgenda(LocalDate inicio, LocalDate fim) {
         var usuarioLogado = usuarioService.getUsuarioLogado();
 

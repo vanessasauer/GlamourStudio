@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import StoreProvider from "./redux/StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="pt-br"
+      lang="pt-BR"
       className="h-full"
-    >
-      <body className="min-h-full w-full bg-[#F8F5F0]">
-        {children}
+      >
+      <body>
+        <StoreProvider>
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );

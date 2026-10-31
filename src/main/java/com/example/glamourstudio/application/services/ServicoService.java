@@ -11,6 +11,8 @@ import java.util.List;
 @Service
 public class ServicoService {
 
+    @Autowired
+    UsuarioService usuarioService;
 
     @Autowired
     private ServicoRepository servicoRepository;
@@ -21,7 +23,16 @@ public class ServicoService {
 
     public List<ServicoResponse> listarTodosServicosTable() {
 
-        return servicoRepository.findAll()
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+
+        if (usuarioLogado.empresa_id() == null) {
+            return servicoRepository.findAll()
+                    .stream()
+                    .map(ServicoResponse::new)
+                    .toList();
+        }
+
+        return servicoRepository.getServicosByEmpresa_Id(usuarioLogado.empresa_id())
                 .stream()
                 .map(ServicoResponse::new)
                 .toList();

@@ -33,6 +33,10 @@ public class Cliente {
 
     private EnumStatusCliente statusCliente = EnumStatusCliente.ATIVO;
 
+    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o cliente, irá carregar as empresas junto.
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
+
     public Cliente(ClienteRequest cliente) {
         this.setNome(cliente.nome());
         this.setDataNascimento(cliente.dataNascimento());
