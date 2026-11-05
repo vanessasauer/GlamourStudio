@@ -26,9 +26,12 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
-    }
-  },
+      ],
+      "react-redux": [
+        "./node_modules/react-redux" /* 👈 Adicione esta linha exata */
+  ]
+}
+},
   "include": [
     "next-env.d.ts",
     "**/*.ts",

@@ -5,7 +5,7 @@ import api from "./api";
 
 export async function buscarListaAtendimentos() : Promise<Atendimento[]> {
 
-    const dados = await api.get<Atendimento[]>("http://localhost:8080/atendimento");
+    const dados = await api.get<Atendimento[]>("/atendimento");
 
     if(dados.status == 200){
         return dados.data;
@@ -17,7 +17,7 @@ export async function buscarListaAtendimentos() : Promise<Atendimento[]> {
 
 export async function buscarMinhaAgenda(inicio?:string, fim?:string) : Promise<Atendimento[]> {
 const dados = await
-api.get<Atendimento[]>("http://localhost:8080/atendimento/minha-agenda", {params:{inicio: inicio || undefined, fim: fim || undefined}});
+api.get<Atendimento[]>("/atendimento/minha-agenda", {params:{inicio: inicio || undefined, fim: fim || undefined}});
 if(dados.status == 200){
 return dados.data;
 }
@@ -26,7 +26,7 @@ return[];
 
 export async function buscarPainelMensal() : Promise<PainelFaturamento> {
 
-    const dados = await api.get<PainelFaturamento>("http://localhost:8080/atendimento/painel");
+    const dados = await api.get<PainelFaturamento>("/atendimento/painel");
 
     return dados.data;
     
@@ -34,7 +34,7 @@ export async function buscarPainelMensal() : Promise<PainelFaturamento> {
 
 export async function deletarAtendimento(id:number) : Promise<number> {
 
-   var dados = await api.delete('http://localhost:8080/atendimento/'+id+'/excluir');
+   var dados = await api.delete('/atendimento/'+id+'/excluir');
 
     return dados.status; 
 }
@@ -54,7 +54,7 @@ export async function atualizarStatusAtendimento(atendimento:Atendimento) : Prom
     }
 
     var dadosRetorno = await  
-    api.patch('http://localhost:8080/atendimento/'+atendimento.id+'/status',novoStatus);
+    api.patch('/atendimento/'+atendimento.id+'/status',novoStatus);
 
     if(dadosRetorno.status==200){
 
@@ -71,20 +71,20 @@ export async function atualizarStatusAtendimento(atendimento:Atendimento) : Prom
 }
 
 export async function consultaAtendimentoPorId(id:number):Promise<Atendimento>{
-    const valorAtendimentoBack = await api.get<Atendimento>('http://localhost:8080/atendimento/'+id);
+    const valorAtendimentoBack = await api.get<Atendimento>('/atendimento/'+id);
     return valorAtendimentoBack.data;
 
 }
 
 export async function atualizarAtendimento(atendimento:Atendimento): Promise<number> {
     var dadosRetorno = await
-    api.put<number>('http://localhost:8080/atendimento/'+atendimento.id, atendimento);
+    api.put<number>('/atendimento/'+atendimento.id, atendimento);
     return dadosRetorno.data;
     
 }
 
 export async function  salvarAtendimento (atendimento:Atendimento): Promise<number>{
     var dadosRetorno = await  
-    api.post<number>('http://localhost:8080/atendimento',atendimento);
+    api.post<number>('/atendimento',atendimento);
     return dadosRetorno.data;
 }
