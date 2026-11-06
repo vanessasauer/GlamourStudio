@@ -110,13 +110,5 @@ public class AtendimentoController {
         return ResponseEntity.ok(atendimentoService.listarMinhaAgenda(inicio, fim));
     }
 
-    @GetMapping("/painel")
-    @Operation(summary = "Painel de faturamento do mês do profissional logado.",
-            description = "Retorna a soma dos atendimentos ATENDIDO do usuário logado no mês vigente.")
-    public ResponseEntity<PainelFaturamentoResponse> painel(){
-
-        return ResponseEntity.ok(atendimentoService.gerarPainelMensal());
-    }
-
 
 }

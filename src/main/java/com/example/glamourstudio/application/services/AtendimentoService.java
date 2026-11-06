@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.YearMonth;
 import java.util.List;
 
 @Service
@@ -58,25 +57,6 @@ public class AtendimentoService {
                 .stream()
                 .map(AtendimentoResponse::new)
                 .toList();
-    }
-
-    // Soma dos atendimentos ATENDIDO do profissional logado no mês vigente.
-    public PainelFaturamentoResponse gerarPainelMensal() {
-
-        var usuarioLogado = usuarioService.getUsuarioLogado();
-        YearMonth mesAtual = YearMonth.now();
-
-        var atendimentos = atendimentoRepository
-                .findByProfissionalIdAndStatusAtendimentoAndDataHoraBetween(
-                        usuarioLogado.id(),
-                        EnumStatusAtendimento.ATENDIDO,
-                        mesAtual.atDay(1).atStartOfDay(),
-                        mesAtual.atEndOfMonth().atTime(LocalTime.MAX));
-
-        return new PainelFaturamentoResponse(
-                mesAtual.toString(),
-                atendimentos.size(),
-                Atendimento.somarValores(atendimentos));
     }
 
 

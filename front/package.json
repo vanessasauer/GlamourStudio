@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.13.0",
+    "@reduxjs/toolkit": "^2.14.0",
     "axios": "^1.20.0",
     "js-cookie": "^3.0.8",
     "next": "16.3.4",

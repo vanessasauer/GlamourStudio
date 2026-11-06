@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -27,7 +25,7 @@ public class Atendimento {
 
     private String profissional;
 
-    // id do Usuario que vai atender (usado para filtrar agenda e painel pelo logado)
+    // id do Usuario que vai atender (usado para filtrar a agenda pelo logado)
     private Long profissionalId;
 
     private LocalDateTime dataHora;
@@ -50,14 +48,6 @@ public class Atendimento {
         this.setDataHora(atendimento.dataHora());
         this.setServico(atendimento.servico());
         this.setValor(atendimento.valor());
-    }
-
-    // Regra de negócio: soma dos valores de uma lista de atendimentos (ignora os sem valor).
-    public static BigDecimal somarValores(List<Atendimento> atendimentos) {
-        return atendimentos.stream()
-                .map(Atendimento::getValor)
-                .filter(Objects::nonNull)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 

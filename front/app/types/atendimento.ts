@@ -27,13 +27,3 @@ export interface AtendimentoFormProps{
     atendimentoExistente?:Atendimento
  
 }
- 
-export interface PainelFaturamento{
- 
-    mes:string,
- 
-    quantidadeAtendimentos:number,
- 
-    totalFaturado:number
- 
-}

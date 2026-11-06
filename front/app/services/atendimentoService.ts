@@ -1,4 +1,4 @@
-import { Atendimento, PainelFaturamento } from "../types/atendimento";
+import { Atendimento } from "../types/atendimento";
 import api from "./api";
 
 
@@ -22,14 +22,6 @@ if(dados.status == 200){
 return dados.data;
 }
 return[];
-}
-
-export async function buscarPainelMensal() : Promise<PainelFaturamento> {
-
-    const dados = await api.get<PainelFaturamento>("/atendimento/painel");
-
-    return dados.data;
-    
 }
 
 export async function deletarAtendimento(id:number) : Promise<number> {

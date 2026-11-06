@@ -1,6 +1,5 @@
 package com.example.glamourstudio.domain.repository;
 
-import com.example.glamourstudio.application.DTOs.EnumStatusAtendimento;
 import com.example.glamourstudio.domain.entities.Atendimento;
 import com.example.glamourstudio.domain.entities.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +13,6 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
 
     // Agenda do profissional num intervalo (usado para o dia), em ordem de horário.
     List<Atendimento> findByProfissionalIdAndDataHoraBetweenOrderByDataHoraAsc(Long profissionalId, LocalDateTime inicio, LocalDateTime fim);
-
-    // Atendimentos de um profissional, com um status, num intervalo (usado no painel do mês).
-    List<Atendimento> findByProfissionalIdAndStatusAtendimentoAndDataHoraBetween(Long profissionalId, EnumStatusAtendimento status, LocalDateTime inicio, LocalDateTime fim);
 
     List<Atendimento> getAtendimentosByEmpresa_Id(Long empresa);
 }
