@@ -26,11 +26,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/auth/login",
+                                        "/usuarios/admin",
                                         "/swagger-ui/**",
                                         "/webjars/**",
                                         "/swagger-resources/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
+
                         // a própria pessoa sempre pode ver seus dados (usado no login)
                         .requestMatchers("/usuarios/buscarusuariologado").authenticated()
 
