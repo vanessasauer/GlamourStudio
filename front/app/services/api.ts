@@ -21,4 +21,17 @@ api.interceptors.request.use(
     }
 );
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) =>{
+        // 401 = token expirado ou inválido (enviado pelo JwtFilter do back-end)
+        if(error.response?.status === 401 && window.location.pathname !== '/login'){
+            Cookies.remove('token');
+            window.location.href = '/login';
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 export default api
