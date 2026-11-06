@@ -1,6 +1,16 @@
+'use client'
+
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export default function Sidebar(){
+
+    // pega o crachá de quem está logado
+    const role = useSelector((state: RootState) => state.auth.usuario?.role);
+
+    const isAdmin = role === "ROLE_ADMIN";
+    const isRecepcao = role === "ROLE_RECEPCIONISTA";
 
     return(
 
@@ -24,8 +34,8 @@ export default function Sidebar(){
                 </Link>
 
                 <Link 
-                href="/agenda" 
-                className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    href="/agenda" 
+                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
                 >
                     Minha agenda
                 </Link>
@@ -45,11 +55,14 @@ export default function Sidebar(){
                 </Link>
 
                 <Link 
-                        href="/servicos" 
-                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                    >
-                        Serviços
-                    </Link>
+                    href="/servicos" 
+                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                >
+                    Serviços
+                </Link>
+
+                {/* Equipes: só admin e recepcionista */}
+                {(isAdmin || isRecepcao) && (
 
                     <Link 
                         href="/equipes" 
@@ -58,22 +71,35 @@ export default function Sidebar(){
                         Equipes
                     </Link>
 
+                )}
+
+                {/* Empresas: só admin */}
+                {isAdmin && (
+
                     <Link 
                         href="/empresas" 
                         className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
                     >
                         Empresas
                     </Link>
-                
-                <Link 
-                    href="/usuarios" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Usuários
-                </Link>  
+
+                )}
+
+                {/* Usuários: só admin */}
+                {isAdmin && (
+
+                    <Link 
+                        href="/usuarios" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Usuários
+                    </Link>
+
+                )}
 
             </nav>
 
-        </aside>);
+        </aside>
+    );
 
 }

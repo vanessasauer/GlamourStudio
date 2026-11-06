@@ -10,11 +10,12 @@ export default function UsuarioForm({usuarioExistente}:UsuarioFormProps) {
     const router = useRouter();
 
 const  [usuario, setUsuario] = useState<Usuario>(
-    usuarioExistente ||
-    new Usuario(null,"","","ATIVO","","")
+    usuarioExistente
+    ? { ...usuarioExistente, role: (usuarioExistente.role ?? "RECEPCIONISTA").replace("ROLE_", "") }
+    : new Usuario(null,"","","ATIVO","","","RECEPCIONISTA")
 );
 
-const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha', valor:string) =>{
+const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha' | 'role', valor:string) =>{
     setUsuario(
         valorAnterior => 
         new Usuario(
@@ -24,7 +25,8 @@ const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha', valor:string
             campo === 'email' ? valor : valorAnterior.email,
             valorAnterior.status,
             campo === 'cpf' ? valor : valorAnterior.cpf,
-            campo === 'senha' ? valor : valorAnterior.senha
+            campo === 'senha' ? valor : valorAnterior.senha,
+            campo === 'role' ? valor : valorAnterior.role
             
         )
     )
@@ -133,6 +135,25 @@ const handlerSalvar = async (formdata : FormData) =>{
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
+
+                </div>
+
+                <div className="space-y-2">
+
+                    <label className="block text-sm font-medium text-[#6B6054]">
+                        Perfil de acesso:
+                    </label>
+
+                    <select
+                        name="role"
+                        value = {usuario.role}
+                        onChange={(e)=> handlerChange('role', e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
+                    >
+                        <option value="ADMIN">Administrador</option>
+                        <option value="RECEPCIONISTA">Recepcionista</option>
+                        <option value="PROFISSIONAL">Profissional</option>
+                    </select>
 
                 </div>
 

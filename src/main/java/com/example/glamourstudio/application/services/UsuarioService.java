@@ -90,6 +90,7 @@ public class UsuarioService {
                 usuarioBanco.setCpf(new CPF(usuario.cpf()));
                 usuarioBanco.setEmail(usuario.email());
                 usuarioBanco.setSenha(usuario.senha());
+                usuarioBanco.setRole("ROLE_" + usuario.role().toUpperCase());
                 usuarioRepository.save(usuarioBanco);
                 return  new UsuarioResponse(usuarioBanco);
             }

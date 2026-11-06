@@ -86,7 +86,7 @@ public class Usuario implements UserDetails {
         this.setNome(usuario.nome());
         this.setSenha(usuario.senha());
         this.setEmail(usuario.email());
-        this.setRole("ROLE_USER");
+        this.setRole("ROLE_" + usuario.role().toUpperCase());
     }
 
     @Override
