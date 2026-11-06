@@ -1,38 +1,53 @@
 "use client"
-import { atualizarStatusAtendimento, buscarMinhaAgenda, buscarPainelMensal } from "@/app/services/atendimentoService";
-import { Atendimento, PainelFaturamento } from "@/app/types/atendimento";
+import {
+carregarAtendidosMes,
+selectMesVigente,
+selectQuantidadeAtendidosMes,
+selectTotalFaturadoMes
+} from "@/app/redux/slices/agendaSlice";
+import { AppDispatch, RootState } from "@/app/redux/store";
+import { atualizarStatusAtendimento, buscarMinhaAgenda } from "@/app/services/atendimentoService";
+import { Atendimento } from "@/app/types/atendimento";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MinhaAgenda(){
 
 const hoje = new Date().toLocaleDateString("sv-SE");
 
+const dispatch = useDispatch<AppDispatch>();
+
+// painel do mês vigente vem do store (slice "agenda")
+const mesVigente = useSelector((state:RootState)=> selectMesVigente(state));
+const quantidadeAtendidos = useSelector((state:RootState)=> selectQuantidadeAtendidosMes(state));
+const totalFaturado = useSelector((state:RootState)=> selectTotalFaturadoMes(state));
+
+// a tabela continua local, pois depende do período escolhido na tela
 const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);
-const [painel, setPainel] = useState<PainelFaturamento | null>(null);
 const [dataInicio, setDataInicio] = useState(hoje);
 const [dataFim, setDataFim] = useState(hoje);
 
 useEffect( ()=>{
-carregarDados();
+dispatch(carregarAtendidosMes());
+},[dispatch]);
+
+useEffect( ()=>{
+carregarAgenda();
 },[dataInicio, dataFim]);
 
-const carregarDados = async () => {
+const carregarAgenda = async () => {
 try{
-const [agenda, dadosPainel] = await Promise.all([
-buscarMinhaAgenda(dataInicio, dataFim),
-buscarPainelMensal()
-]);
-setAtendimentos(agenda);
-setPainel(dadosPainel);
+setAtendimentos(await buscarMinhaAgenda(dataInicio, dataFim));
 } catch (error){
 alert("Erro ao carregar dados")
 }
 }
 
-// Ao mudar o status, recarrega a agenda e o painel (o total do mês muda junto)
+// Ao mudar o status, recarrega a agenda e o painel do store (o total do mês muda junto)
 const handleAlterarStatusAtendimento = async(atendimento:Atendimento) =>{
 await atualizarStatusAtendimento(atendimento);
-carregarDados();
+carregarAgenda();
+dispatch(carregarAtendidosMes());
 }
 
 // Se a data inicial passar da final, a final acompanha
@@ -114,19 +129,19 @@ className="rounded-lg border border-[#D8CBBB] bg-[#FAF7F2] px-4 py-2.5 text-sm t
 <div className="rounded-2xl border border-[#E8DED0] bg-[#FFFDF9] p-6 shadow-sm">
 <p className="text-sm text-[#8A7D70]">Mês vigente</p>
 <p className="mt-2 text-2xl font-semibold text-[#5C5145]">
-{painel ? formatarMes(painel.mes) : "-"}
+{mesVigente ? formatarMes(mesVigente) : "-"}
 </p>
 </div>
 <div className="rounded-2xl border border-[#E8DED0] bg-[#FFFDF9] p-6 shadow-sm">
 <p className="text-sm text-[#8A7D70]">Atendimentos finalizados</p>
 <p className="mt-2 text-2xl font-semibold text-[#5C5145]">
-{painel ? painel.quantidadeAtendimentos : 0}
+{quantidadeAtendidos}
 </p>
 </div>
 <div className="rounded-2xl border border-[#E8DED0] bg-[#FFFDF9] p-6 shadow-sm">
 <p className="text-sm text-[#8A7D70]">Total faturado no mês</p>
 <p className="mt-2 text-2xl font-semibold text-[#5F745C]">
-{formatarMoeda(painel ? painel.totalFaturado : 0)}
+{formatarMoeda(totalFaturado)}
 </p>
 </div>
 </div>

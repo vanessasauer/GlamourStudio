@@ -1,11 +1,16 @@
 "use client"
 
+import { carregarAtendidosMes } from "@/app/redux/slices/agendaSlice";
+import { AppDispatch } from "@/app/redux/store";
 import { atualizarStatusAtendimento, buscarListaAtendimentos, deletarAtendimento } from "@/app/services/atendimentoService";
 import { Atendimento } from "@/app/types/atendimento";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Atendimentos(){
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);
 
@@ -49,6 +54,9 @@ export default function Atendimentos(){
 
         carregarDados();
 
+        // cancelar um atendimento ATENDIDO tira o valor do painel do mês
+        dispatch(carregarAtendidosMes());
+
     }
 
     const handleAlterarStatusAtendimento = async(atendimento:Atendimento) =>{
@@ -56,6 +64,9 @@ export default function Atendimentos(){
         await atualizarStatusAtendimento(atendimento);
 
         carregarDados();
+
+        // mantém o painel do mês (slice "agenda") em sincronia
+        dispatch(carregarAtendidosMes());
 
     }
 
