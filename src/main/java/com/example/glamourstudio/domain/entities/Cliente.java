@@ -33,7 +33,7 @@ public class Cliente {
 
     private EnumStatusCliente statusCliente = EnumStatusCliente.ATIVO;
 
-    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o cliente, irá carregar as empresas junto.
+    @ManyToOne(fetch = FetchType.LAZY) // só carrega a empresa se ela for usada.
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresa;
 

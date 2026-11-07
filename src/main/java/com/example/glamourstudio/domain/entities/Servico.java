@@ -33,7 +33,7 @@ public class Servico{
 
     private EnumStatusServico statusServico = EnumStatusServico.ATIVO;
 
-    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o serviço, irá carregar as empresas junto.
+    @ManyToOne(fetch = FetchType.LAZY) // só carrega a empresa se ela for usada.
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresa;
 

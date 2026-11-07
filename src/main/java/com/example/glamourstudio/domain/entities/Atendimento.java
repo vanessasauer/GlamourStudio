@@ -35,7 +35,7 @@ public class Atendimento {
     // valor cobrado neste atendimento (fica fixo mesmo se o preço do serviço mudar depois)
     private BigDecimal valor;
 
-    @ManyToOne(fetch = FetchType.EAGER) //no momento em que carregar o serviço, irá carregar as empresas junto.
+    @ManyToOne(fetch = FetchType.LAZY) // só carrega a empresa se ela for usada.
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresa;
 
