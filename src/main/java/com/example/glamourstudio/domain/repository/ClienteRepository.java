@@ -1,7 +1,6 @@
 package com.example.glamourstudio.domain.repository;
 
 import com.example.glamourstudio.domain.entities.Cliente;
-import com.example.glamourstudio.domain.entities.Equipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

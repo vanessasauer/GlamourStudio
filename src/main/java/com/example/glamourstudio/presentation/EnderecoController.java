@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/endereco")
-public class EnderecoController {
+public class  EnderecoController {
 
     @Autowired
     private EnderecoService enderecoService;
