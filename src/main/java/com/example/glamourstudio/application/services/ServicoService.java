@@ -1,5 +1,6 @@
 package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
+import com.example.glamourstudio.domain.entities.Empresa;
 import com.example.glamourstudio.domain.entities.Servico;
 import com.example.glamourstudio.domain.repository.EmpresaRepository;
 import com.example.glamourstudio.domain.repository.ServicoRepository;
@@ -35,10 +36,28 @@ public class ServicoService {
                     .toList();
         }
 
-        return servicoRepository.getServicosByEmpresa_Id(usuarioLogado.empresa_id())
+        Empresa empresa = empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null);
+
+        // serviços da empresa + serviços padrão (cadastrados pelo admin, sem empresa)
+        return servicoRepository.getServicosByEmpresa_IdOrEmpresaIsNull(usuarioLogado.empresa_id())
                 .stream()
-                .map(ServicoResponse::new)
+                .map(servico -> montarResposta(servico, empresa))
                 .toList();
+    }
+
+    // se for um serviço padrão que a empresa desativou, mostra como INATIVO só para ela
+    private ServicoResponse montarResposta(Servico servico, Empresa empresa) {
+
+        boolean desativadoPelaEmpresa = servico.getEmpresa() == null
+                && empresa != null
+                && empresa.getServicosPadraoDesativados().stream()
+                .anyMatch(s -> s.getId().equals(servico.getId()));
+
+        if (desativadoPelaEmpresa) {
+            return new ServicoResponse(servico, EnumStatusServico.INATIVO);
+        }
+
+        return new ServicoResponse(servico);
     }
 
     public CriarServicoResponse criarServicoAdmin(CriarServicoRequest criarServicoRequest) {
@@ -47,6 +66,7 @@ public class ServicoService {
             return new CriarServicoResponse(0L,"Serviço salvo com sucesso!");
         }
 
+        // serviço padrão: fica sem empresa e aparece para todas as empresas
         Servico servicoAdminSalvar = new Servico(criarServicoRequest);
         servicoRepository.save(servicoAdminSalvar);
 
@@ -69,7 +89,9 @@ public class ServicoService {
         }else {
             //Serviço existente
             Servico servicoBanco = servicoRepository.findById(id).orElse(null);
-            if(servicoBanco!= null ){
+
+            // serviço padrão (sem empresa) não pode ser editado pela empresa
+            if(servicoBanco!= null && servicoBanco.getEmpresa() != null){
                 servicoBanco.setNome(servico.nome());
                 servicoBanco.setDescricao(servico.descricao());
                 servicoBanco.setValor(servico.valor());
@@ -96,13 +118,33 @@ public class ServicoService {
     public boolean atualizarStatus(EnumStatusServico statusServico, Long id) {
 
         Servico servicoBanco = servicoRepository.findById(id).orElse(null);
-        if(servicoBanco!= null ){
-            servicoBanco.setStatusServico(statusServico);
-            servicoRepository.save(servicoBanco);
-            return  true;
+        if(servicoBanco == null){
+            return false;
         }
-        return false;
 
+        // serviço padrão: ativa ou desativa só para a empresa de quem está logado
+        if(servicoBanco.getEmpresa() == null){
+
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            Empresa empresa = empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null);
+            if(empresa == null){
+                return false;
+            }
+
+            if(statusServico == EnumStatusServico.ATIVO){
+                empresa.getServicosPadraoDesativados().removeIf(s -> s.getId().equals(servicoBanco.getId()));
+            }else {
+                empresa.getServicosPadraoDesativados().add(servicoBanco);
+            }
+
+            empresaRepository.save(empresa);
+            return true;
+        }
+
+        // serviço da própria empresa: muda o status normalmente
+        servicoBanco.setStatusServico(statusServico);
+        servicoRepository.save(servicoBanco);
+        return  true;
 
     }
 

@@ -7,13 +7,19 @@ public record ServicoResponse(Long id, String nome, String descricao, BigDecimal
 
     public ServicoResponse(Servico servicoEntidade){
 
+        this(servicoEntidade, servicoEntidade.getStatusServico());
+    }
+
+    // usado quando o status mostrado é o da empresa (serviço padrão desativado por ela)
+    public ServicoResponse(Servico servicoEntidade, EnumStatusServico statusServico){
+
         this(
                 servicoEntidade.getId(),
                 servicoEntidade.getNome(),
                 servicoEntidade.getDescricao(),
                 servicoEntidade.getValor(),
                 servicoEntidade.getDuracaoMinutos(),
-                servicoEntidade.getStatusServico()
+                statusServico
         );
     }
 

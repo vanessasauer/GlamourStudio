@@ -1,4 +1,5 @@
 package com.example.glamourstudio.application.DTOs;
 
-public record CriarAdminRequest(String nome, String email, String senha, String cpf, String secretKey) {
+public record CriarAdminRequest(String nome, String email, String senha, String cpf,
+                                String secretKey, EmpresaRequest empresa) {
 }

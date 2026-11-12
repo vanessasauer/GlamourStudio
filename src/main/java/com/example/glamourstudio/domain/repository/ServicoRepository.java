@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
 
-    List<Servico> getServicosByEmpresa_Id(Long empresa);
+    // serviços da empresa + serviços padrão (cadastrados pelo admin, sem empresa)
+    List<Servico> getServicosByEmpresa_IdOrEmpresaIsNull(Long empresa);
 
 }

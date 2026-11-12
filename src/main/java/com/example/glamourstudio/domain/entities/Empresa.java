@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -27,6 +29,15 @@ public class Empresa {
 
     @OneToMany(mappedBy = "empresa") //pra apontar a coluna da tabela seguinte, com a chave estrangeira
     private List<Usuario> usuarios;
+
+    // serviços padrão (do admin) que esta empresa escolheu não usar
+    @ManyToMany
+    @JoinTable(
+            name = "tb_empresa_servico_desativado",
+            joinColumns = @JoinColumn(name = "empresa_id"),
+            inverseJoinColumns = @JoinColumn(name = "servico_id")
+    )
+    private Set<Servico> servicosPadraoDesativados = new HashSet<>();
 
     private String role = "ROLE_EMPRESA";
 

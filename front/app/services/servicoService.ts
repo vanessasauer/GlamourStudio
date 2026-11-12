@@ -37,7 +37,7 @@ export async function atualizarStatusServico(servico:Servico) : Promise<void> {
     }
 
     var dadosRetorno = await  
-    api.patch('/'+servico.id+'/status',novoStatus);
+    api.patch('/servico/'+servico.id+'/status',novoStatus);
 
     if(dadosRetorno.status==200){
 
