@@ -1,21 +1,30 @@
 'use client'
 
+import { buscarListaEmpresas } from "@/app/services/empresaService";
 import { atualizarUsuario, salvarUsuario } from "@/app/services/usuarioService";
+import { Empresa } from "@/app/types/empresa";
 import { Usuario, UsuarioFormProps } from "@/app/types/usuario";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function UsuarioForm({usuarioExistente}:UsuarioFormProps) {
     const router = useRouter();
 
 const  [usuario, setUsuario] = useState<Usuario>(
     usuarioExistente
-    ? { ...usuarioExistente, role: (usuarioExistente.role ?? "RECEPCIONISTA").replace("ROLE_", "") }
-    : new Usuario(null,"","","ATIVO","","","RECEPCIONISTA")
+    ? { ...usuarioExistente, senha: "", role: (usuarioExistente.role ?? "RECEPCIONISTA").replace("ROLE_", "") }
+    : new Usuario(null,"","","ATIVO","","","RECEPCIONISTA", null)
 );
 
-const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha' | 'role', valor:string) =>{
+// lista de empresas cadastradas, para o admin escolher
+const [empresas, setEmpresas] = useState<Empresa[]>([]);
+
+useEffect(() => {
+    buscarListaEmpresas().then(setEmpresas);
+}, []);
+
+const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha' | 'role' | 'empresaId', valor:string) =>{
     setUsuario(
         valorAnterior => 
         new Usuario(
@@ -26,7 +35,8 @@ const handlerChange = ( campo : 'nome' | 'email' | 'cpf' | 'senha' | 'role', val
             valorAnterior.status,
             campo === 'cpf' ? valor : valorAnterior.cpf,
             campo === 'senha' ? valor : valorAnterior.senha,
-            campo === 'role' ? valor : valorAnterior.role
+            campo === 'role' ? valor : valorAnterior.role,
+            campo === 'empresaId' ? (valor ? Number(valor) : null) : valorAnterior.empresaId
             
         )
     )
@@ -130,6 +140,7 @@ const handlerSalvar = async (formdata : FormData) =>{
                         name="Senha"
                         value = {usuario.senha}
                         type="password"
+                        required={!usuarioExistente}
                         placeholder="************"
                         onChange={(e)=> handlerChange('senha', e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
@@ -150,9 +161,33 @@ const handlerSalvar = async (formdata : FormData) =>{
                         onChange={(e)=> handlerChange('role', e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
-                        <option value="ADMIN">Administrador</option>
                         <option value="RECEPCIONISTA">Recepcionista</option>
                         <option value="PROFISSIONAL">Profissional</option>
+                    </select>
+
+                </div>
+
+                <div className="space-y-2">
+
+                    <label className="block text-sm font-medium text-[#6B6054]">
+                        Empresa:
+                    </label>
+
+                    <select
+                        name="empresa"
+                        value = {usuario.empresaId ?? ""}
+                        required
+                        onChange={(e)=> handlerChange('empresaId', e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
+                    >
+                        <option value="">Selecione a empresa</option>
+
+                        {empresas.map((empresa) => (
+                            <option key={empresa.id} value={empresa.id ?? ""}>
+                                {empresa.nomeFantasia}
+                            </option>
+                        ))}
+
                     </select>
 
                 </div>

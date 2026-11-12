@@ -71,6 +71,13 @@ public class Usuario implements UserDetails {
         this.email = email;
     }
 
+    // na edição, senha em branco mantém a senha atual
+    public void atualizarSenha(String novaSenha) {
+        if(novaSenha != null && !novaSenha.isBlank()){
+            this.senha = novaSenha;
+        }
+    }
+
 
     //é uma regra de negócio para criar o usuário admin
     public Usuario(CriarAdminRequest criarAdminRequest) {

@@ -8,7 +8,8 @@ export class Usuario{
         public status:string,
         public cpf:string,
         public senha:string,
-        public role:string = "RECEPCIONISTA"
+        public role:string = "RECEPCIONISTA",
+        public empresaId:number | null = null
 
     ){}
     

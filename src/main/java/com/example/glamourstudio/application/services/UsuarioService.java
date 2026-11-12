@@ -3,6 +3,7 @@ import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.application.DTOs.EnumStatusUsuario;
 import com.example.glamourstudio.domain.entities.Equipe;
 import com.example.glamourstudio.domain.entities.Usuario;
+import com.example.glamourstudio.domain.repository.EmpresaRepository;
 import com.example.glamourstudio.domain.repository.EquipeRepository;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import com.example.glamourstudio.domain.valueobject.CPF;
@@ -24,6 +25,9 @@ public class UsuarioService {
 
     @Autowired
     private EquipeRepository equipeRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     @Value("${spring.secretkey}")
     private String secret;
@@ -79,6 +83,7 @@ public class UsuarioService {
         //Novo Usuario
         if(id == 0L) {
             Usuario usuarioBanco = new Usuario(usuario);
+            usuarioBanco.setEmpresa(empresaRepository.findById(usuario.empresaId()).orElse(null));
             usuarioRepository.save(usuarioBanco);
 
             return new UsuarioResponse(usuarioBanco);
@@ -89,8 +94,9 @@ public class UsuarioService {
                 usuarioBanco.setNome(usuario.nome());
                 usuarioBanco.setCpf(new CPF(usuario.cpf()));
                 usuarioBanco.setEmail(usuario.email());
-                usuarioBanco.setSenha(usuario.senha());
+                usuarioBanco.atualizarSenha(usuario.senha());
                 usuarioBanco.setRole("ROLE_" + usuario.role().toUpperCase());
+                usuarioBanco.setEmpresa(empresaRepository.findById(usuario.empresaId()).orElse(null));
                 usuarioRepository.save(usuarioBanco);
                 return  new UsuarioResponse(usuarioBanco);
             }
