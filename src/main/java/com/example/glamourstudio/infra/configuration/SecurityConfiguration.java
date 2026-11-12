@@ -36,23 +36,25 @@ public class SecurityConfiguration {
                         // a própria pessoa sempre pode ver seus dados (usado no login)
                         .requestMatchers("/usuarios/buscarusuariologado").authenticated()
 
+                        // lista de usuários: usada no formulário de atendimento para escolher o profissional
+                        .requestMatchers(HttpMethod.GET, "/usuarios").hasAnyRole("ADMIN", "RECEPCIONISTA", "PROFISSIONAL")
+
                         // usuários e empresas: só admin
                         .requestMatchers("/usuarios/**", "/empresa/**").hasRole("ADMIN")
 
-                        // equipes: recepcionista só vê, admin faz tudo
-                        .requestMatchers(HttpMethod.GET, "/equipe/**").hasAnyRole("ADMIN", "RECEPCIONISTA")
-                        .requestMatchers("/equipe/**").hasRole("ADMIN")
+                        // equipes: só recepcionista
+                        .requestMatchers("/equipe/**").hasRole("RECEPCIONISTA")
 
-                        // serviços: todos veem, só admin altera
-                        .requestMatchers(HttpMethod.GET, "/servico/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "PROFISSIONAL")
-                        .requestMatchers("/servico/**").hasRole("ADMIN")
+                        // serviços: recepcionista faz tudo, profissional só vê
+                        .requestMatchers(HttpMethod.GET, "/servico/**").hasAnyRole("RECEPCIONISTA", "PROFISSIONAL")
+                        .requestMatchers("/servico/**").hasRole("RECEPCIONISTA")
 
-                        // clientes: profissional só vê, admin e recepcionista fazem tudo
-                        .requestMatchers(HttpMethod.GET, "/cliente/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "PROFISSIONAL")
-                        .requestMatchers("/cliente/**").hasAnyRole("ADMIN", "RECEPCIONISTA")
+                        // clientes: recepcionista faz tudo, profissional só vê
+                        .requestMatchers(HttpMethod.GET, "/cliente/**").hasAnyRole("RECEPCIONISTA", "PROFISSIONAL")
+                        .requestMatchers("/cliente/**").hasRole("RECEPCIONISTA")
 
-                        // atendimentos: todos
-                        .requestMatchers("/atendimento/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "PROFISSIONAL")
+                        // atendimentos: recepcionista e profissional
+                        .requestMatchers("/atendimento/**").hasAnyRole("RECEPCIONISTA", "PROFISSIONAL")
 
                                 .anyRequest().authenticated()
                 )

@@ -6,11 +6,12 @@ import { RootState } from "../redux/store";
 
 export default function Sidebar(){
 
-    // pega o crachá de quem está logado
-    const role = useSelector((state: RootState) => state.auth.usuario?.role);
+    // pega o perfil (crachá) de quem está logado
+    const perfil = useSelector((state: RootState) => state.auth.usuario?.role);
 
-    const isAdmin = role === "ROLE_ADMIN";
-    const isRecepcao = role === "ROLE_RECEPCIONISTA";
+    const perfilAdmin = perfil === "ROLE_ADMIN";
+    const perfilRecepcionista = perfil === "ROLE_RECEPCIONISTA";
+    const perfilProfissional = perfil === "ROLE_PROFISSIONAL";
 
     return(
 
@@ -26,6 +27,7 @@ export default function Sidebar(){
 
             <nav className="flex flex-col space-y-2">
 
+                {/* Home: todos */}
                 <Link 
                     href="/home" 
                     className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
@@ -33,36 +35,53 @@ export default function Sidebar(){
                     Home
                 </Link>
 
-                <Link 
-                    href="/agenda" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Minha agenda
-                </Link>
+                {/* Telas do salão: recepcionista e profissional */}
+                {(perfilRecepcionista || perfilProfissional) && (
 
-                <Link 
-                    href="/atendimentos" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Atendimentos
-                </Link>
+                    <Link 
+                        href="/agenda" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Minha agenda
+                    </Link>
 
-                <Link 
-                    href="/clientes" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Clientes
-                </Link>
+                )}
 
-                <Link 
-                    href="/servicos" 
-                    className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
-                >
-                    Serviços
-                </Link>
+                {(perfilRecepcionista || perfilProfissional) && (
 
-                {/* Equipes: só admin e recepcionista */}
-                {(isAdmin || isRecepcao) && (
+                    <Link 
+                        href="/atendimentos" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Atendimentos
+                    </Link>
+
+                )}
+
+                {(perfilRecepcionista || perfilProfissional) && (
+
+                    <Link 
+                        href="/clientes" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Clientes
+                    </Link>
+
+                )}
+
+                {(perfilRecepcionista || perfilProfissional) && (
+
+                    <Link 
+                        href="/servicos" 
+                        className="flex items-center px-4 py-3 text-[#6B6054] hover:text-[#4F463D] hover:bg-[#EFE7DC] rounded-xl transition-all duration-200 font-medium"
+                    >
+                        Serviços
+                    </Link>
+
+                )}
+
+                {/* Equipes: só recepcionista */}
+                {perfilRecepcionista && (
 
                     <Link 
                         href="/equipes" 
@@ -74,7 +93,7 @@ export default function Sidebar(){
                 )}
 
                 {/* Empresas: só admin */}
-                {isAdmin && (
+                {perfilAdmin && (
 
                     <Link 
                         href="/empresas" 
@@ -86,7 +105,7 @@ export default function Sidebar(){
                 )}
 
                 {/* Usuários: só admin */}
-                {isAdmin && (
+                {perfilAdmin && (
 
                     <Link 
                         href="/usuarios" 
