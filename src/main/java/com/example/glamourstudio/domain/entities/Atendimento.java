@@ -21,7 +21,9 @@ public class Atendimento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String cliente;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
 
     private String profissional;
 
@@ -30,7 +32,9 @@ public class Atendimento {
 
     private LocalDateTime dataHora;
 
-    private String servico;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "servico_id", referencedColumnName = "id")
+    private Servico servico;
 
     // valor cobrado neste atendimento (fica fixo mesmo se o preço do serviço mudar depois)
     private BigDecimal valor;
@@ -42,11 +46,9 @@ public class Atendimento {
     private EnumStatusAtendimento statusAtendimento = EnumStatusAtendimento.AGENDADO;
 
     public Atendimento(AtendimentoRequest atendimento) {
-        this.setCliente(atendimento.cliente());
         this.setProfissional(atendimento.profissional());
         this.setProfissionalId(atendimento.profissionalId());
         this.setDataHora(atendimento.dataHora());
-        this.setServico(atendimento.servico());
         this.setValor(atendimento.valor());
     }
 

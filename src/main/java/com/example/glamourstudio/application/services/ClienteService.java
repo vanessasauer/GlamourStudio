@@ -3,6 +3,7 @@ package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Cliente;
 import com.example.glamourstudio.domain.repository.ClienteRepository;
+import com.example.glamourstudio.domain.repository.EmpresaRepository;
 import com.example.glamourstudio.domain.valueobject.TELEFONE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ClienteService {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
 
     public List<ClienteResponse> listarTodosClientesTable() {
@@ -41,6 +45,11 @@ public class ClienteService {
         //Novo Cliente
         if(id == 0L) {
             Cliente clienteBanco = new Cliente(cliente);
+
+            // o cliente fica com a empresa de quem está cadastrando
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            clienteBanco.setEmpresa(empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null));
+
             clienteRepository.save(clienteBanco);
 
             return new ClienteResponse(clienteBanco);

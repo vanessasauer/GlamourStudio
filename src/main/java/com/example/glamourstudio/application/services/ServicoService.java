@@ -1,6 +1,7 @@
 package com.example.glamourstudio.application.services;
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Servico;
+import com.example.glamourstudio.domain.repository.EmpresaRepository;
 import com.example.glamourstudio.domain.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,8 @@ public class ServicoService {
     @Value("${spring.secretkey}")
     private String secret;
 
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public List<ServicoResponse> listarTodosServicosTable() {
 
@@ -55,6 +58,11 @@ public class ServicoService {
         //Novo Servico
         if(id == 0L) {
             Servico servicoBanco = new Servico(servico);
+
+            // o serviço fica com a empresa de quem está cadastrando
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            servicoBanco.setEmpresa(empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null));
+
             servicoRepository.save(servicoBanco);
 
             return new ServicoResponse(servicoBanco);

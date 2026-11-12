@@ -2,8 +2,7 @@ package com.example.glamourstudio.application.services;
 
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Atendimento;
-import com.example.glamourstudio.domain.repository.AtendimentoRepository;
-import com.example.glamourstudio.domain.repository.UsuarioRepository;
+import com.example.glamourstudio.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +18,15 @@ public class AtendimentoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ServicoRepository servicoRepository;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -66,6 +74,14 @@ public class AtendimentoService {
         //Novo Atendimento
         if(id == 0L) {
             Atendimento atendimentoBanco = new Atendimento(atendimento);
+
+            atendimentoBanco.setCliente(clienteRepository.findById(atendimento.clienteId()).orElse(null));
+            atendimentoBanco.setServico(servicoRepository.findById(atendimento.servicoId()).orElse(null));
+
+            // o atendimento fica com a empresa de quem está cadastrando
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            atendimentoBanco.setEmpresa(empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null));
+
             atendimentoRepository.save(atendimentoBanco);
 
             return new AtendimentoResponse(atendimentoBanco);
@@ -73,12 +89,10 @@ public class AtendimentoService {
             //Atendimento existente
             Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
             if(atendimentoBanco!= null ){
-                atendimentoBanco.setCliente(atendimento.cliente());
-                atendimentoBanco.setProfissional(atendimento.profissional());
+                atendimentoBanco.setCliente(clienteRepository.findById(atendimento.clienteId()).orElse(null));                atendimentoBanco.setProfissional(atendimento.profissional());
                 atendimentoBanco.setProfissionalId(atendimento.profissionalId());
                 atendimentoBanco.setDataHora(atendimento.dataHora());
-                atendimentoBanco.setServico(atendimento.servico());
-                atendimentoBanco.setValor(atendimento.valor());
+                atendimentoBanco.setServico(servicoRepository.findById(atendimento.servicoId()).orElse(null));                atendimentoBanco.setValor(atendimento.valor());
                 atendimentoRepository.save(atendimentoBanco);
                 return  new AtendimentoResponse(atendimentoBanco);
             }

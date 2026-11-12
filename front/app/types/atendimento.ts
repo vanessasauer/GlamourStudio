@@ -16,7 +16,11 @@ export class Atendimento{
  
         public valor:number | null,
  
-        public statusAtendimento:string
+        public statusAtendimento:string,
+
+        public clienteId:number | null = null,
+
+        public servicoId:number | null = null
  
     ){}
  

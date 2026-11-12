@@ -1,7 +1,11 @@
 "use client"
 import { atualizarAtendimento, salvarAtendimento } from "@/app/services/atendimentoService";
+import { buscarListaClientes } from "@/app/services/clienteService";
+import { buscarListaServicos } from "@/app/services/servicoService";
 import { buscarListaUsuarios } from "@/app/services/usuarioService";
 import { Atendimento, AtendimentoFormProps } from "@/app/types/atendimento";
+import { Cliente } from "@/app/types/cliente";
+import { Servico } from "@/app/types/servico";
 import { Usuario } from "@/app/types/usuario";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,46 +16,80 @@ export default function AtendimentosForm({atendimentoExistente}:AtendimentoFormP
 
 const  [atendimento, setAtendimento] = useState<Atendimento>(
     atendimentoExistente ||
-    new Atendimento(null,"","",null,"","",null,"AGENDADO")
+    new Atendimento(null,"","",null,"","",null,"AGENDADO",null,null)
 );
 
 const [profissionais, setProfissionais] = useState<Usuario[]>([]);
+const [clientes, setClientes] = useState<Cliente[]>([]);
+const [servicos, setServicos] = useState<Servico[]>([]);
 
 useEffect(()=>{
 
-    carregarProfissionais();
+    carregarListas();
 
 },[]);
 
-const carregarProfissionais = async () => {
+// busca profissionais, clientes e serviços cadastrados (já vêm filtrados pela empresa)
+const carregarListas = async () => {
 
     try{
 
-        const dados = await buscarListaUsuarios();
+        const usuarios = await buscarListaUsuarios();
+        setProfissionais(usuarios.filter((usuario)=> usuario.status === "ATIVO" && usuario.role === "ROLE_PROFISSIONAL"));
 
-        setProfissionais(dados.filter((usuario)=> usuario.status === "ATIVO"));
+        const listaClientes = await buscarListaClientes();
+        setClientes(listaClientes.filter((cliente)=> cliente.statusCliente === "ATIVO"));
+
+        const listaServicos = await buscarListaServicos();
+        setServicos(listaServicos.filter((servico)=> servico.statusServico === "ATIVO"));
 
     } catch (error){
 
-        alert("Erro ao carregar profissionais")
+        alert("Erro ao carregar dados do atendimento")
 
     }
 
 }
 
-const handlerChange = ( campo : 'cliente' | 'dataHora' | 'servico' | 'valor', valor:string) =>{
+const handlerChange = ( campo : 'dataHora' | 'valor', valor:string) =>{
     setAtendimento(
         valorAnterior => 
         new Atendimento(
 
             valorAnterior.id,
-            campo === 'cliente' ? valor : valorAnterior.cliente,
+            valorAnterior.cliente,
             valorAnterior.profissional,
             valorAnterior.profissionalId,
             campo === 'dataHora' ? valor : valorAnterior.dataHora,
-            campo === 'servico' ? valor : valorAnterior.servico,
+            valorAnterior.servico,
             campo === 'valor' ? (valor === "" ? null : Number(valor)) : valorAnterior.valor,
-            valorAnterior.statusAtendimento
+            valorAnterior.statusAtendimento,
+            valorAnterior.clienteId,
+            valorAnterior.servicoId
+            
+        )
+    )
+}
+
+// Ao escolher o cliente, guarda o id (vai para o banco) e o nome (para exibição).
+const handlerCliente = (valor:string) =>{
+
+    const escolhido = clientes.find((cliente)=> String(cliente.id) === valor);
+
+    setAtendimento(
+        valorAnterior => 
+        new Atendimento(
+
+            valorAnterior.id,
+            escolhido ? escolhido.nome : "",
+            valorAnterior.profissional,
+            valorAnterior.profissionalId,
+            valorAnterior.dataHora,
+            valorAnterior.servico,
+            valorAnterior.valor,
+            valorAnterior.statusAtendimento,
+            escolhido ? escolhido.id : null,
+            valorAnterior.servicoId
             
         )
     )
@@ -73,7 +111,33 @@ const handlerProfissional = (valor:string) =>{
             valorAnterior.dataHora,
             valorAnterior.servico,
             valorAnterior.valor,
-            valorAnterior.statusAtendimento
+            valorAnterior.statusAtendimento,
+            valorAnterior.clienteId,
+            valorAnterior.servicoId
+            
+        )
+    )
+}
+
+// Ao escolher o serviço, guarda o id, o nome e já preenche o valor com o preço cadastrado.
+const handlerServico = (valor:string) =>{
+
+    const escolhido = servicos.find((servico)=> String(servico.id) === valor);
+
+    setAtendimento(
+        valorAnterior => 
+        new Atendimento(
+
+            valorAnterior.id,
+            valorAnterior.cliente,
+            valorAnterior.profissional,
+            valorAnterior.profissionalId,
+            valorAnterior.dataHora,
+            escolhido ? escolhido.nome : "",
+            escolhido ? escolhido.valor : valorAnterior.valor,
+            valorAnterior.statusAtendimento,
+            valorAnterior.clienteId,
+            escolhido ? escolhido.id : null
             
         )
     )
@@ -122,15 +186,25 @@ const handlerSalvar = async (formdata : FormData) =>{
                         Cliente:
                     </label>
 
-                    <input
-                        name="cliente"
-                        value = {atendimento.cliente}
-                        required 
-                        onChange={(e)=> handlerChange('cliente', e.target.value)}
-                        placeholder="Maria da Silva"
-                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
+                    <select
+                        name="clienteId"
+                        value = {atendimento.clienteId ?? ""}
+                        required
+                        onChange={(e)=> handlerCliente(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
-                    </input>
+
+                        <option value="">Selecione o cliente</option>
+
+                        {clientes.map((cliente)=>(
+
+                            <option key={cliente.id} value={cliente.id ?? ""}>
+                                {cliente.nome}
+                            </option>
+
+                        ))}
+
+                    </select>
 
                 </div>
 
@@ -186,14 +260,25 @@ const handlerSalvar = async (formdata : FormData) =>{
                         Serviço:
                     </label>
 
-                    <input
-                        name="servico"
-                        value = {atendimento.servico}
-                        placeholder="Manicure"
-                        onChange={(e)=> handlerChange('servico', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
+                    <select
+                        name="servicoId"
+                        value = {atendimento.servicoId ?? ""}
+                        required
+                        onChange={(e)=> handlerServico(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
-                    </input>
+
+                        <option value="">Selecione o serviço</option>
+
+                        {servicos.map((servico)=>(
+
+                            <option key={servico.id} value={servico.id ?? ""}>
+                                {servico.nome}
+                            </option>
+
+                        ))}
+
+                    </select>
 
                 </div>
 
