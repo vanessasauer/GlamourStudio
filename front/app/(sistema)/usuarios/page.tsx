@@ -29,8 +29,6 @@ export default function Usuarios(){
 
         }
 
-        carregarDados();
-
     }
 
     const handleDeletarUsuario = async(usuario:Usuario) =>{

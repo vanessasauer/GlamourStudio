@@ -29,8 +29,7 @@ export default function Servicos(){
 
         }
 
-        carregarDados();
-
+        
     }
 
     const handleDeletarServico = async(servico:Servico) =>{

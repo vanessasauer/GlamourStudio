@@ -29,7 +29,7 @@ export default function Equipes(){
 
         }
 
-        carregarDados();
+      
 
     }
 
