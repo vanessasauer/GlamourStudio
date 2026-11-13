@@ -6,6 +6,7 @@ import Link from "@/node_modules/next/link";
 import { useParams, useRouter } from "@/node_modules/next/navigation";
 import { useEffect, useState } from "react";
 import EquipeForm from "../../components/EquipeForm";
+import ProfissionaisEquipe from "../../components/ProfissionaisEquipe";
 
 
 
@@ -74,6 +75,12 @@ export default function EditarEquipe(){
             <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
 
                 <EquipeForm equipeExistente={equipe}/>
+
+            </div>
+
+            <div className="bg-[#FFFDF9] border border-[#E8DED0] rounded-2xl p-6 md:p-8 shadow-sm">
+
+                <ProfissionaisEquipe equipeId={codigo}/>
 
             </div>
 

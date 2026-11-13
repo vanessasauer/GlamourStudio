@@ -25,20 +25,24 @@ public class SecurityConfiguration {
         return http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/auth/login",
-                                        "/usuarios/admin",
-                                        "/servico/adminServico",
-                                        "/swagger-ui/**",
-                                        "/webjars/**",
-                                        "/swagger-resources/**",
-                                        "/v3/api-docs/**"
-                                ).permitAll()
+                        .requestMatchers("/auth/login",
+                                "/usuarios/admin",
+                                "/servico/adminServico",
+                                "/error",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
                         // a própria pessoa sempre pode ver seus dados (usado no login)
                         .requestMatchers("/usuarios/buscarusuariologado").authenticated()
 
                         // lista de usuários: usada no formulário de atendimento para escolher o profissional
                         .requestMatchers(HttpMethod.GET, "/usuarios").hasAnyRole("ADMIN", "RECEPCIONISTA", "PROFISSIONAL")
+
+                        // adicionar profissional numa equipe: recepcionista (que cuida das equipes)
+                        .requestMatchers(HttpMethod.PATCH, "/usuarios/*/equipe").hasRole("RECEPCIONISTA")
 
                         // usuários e empresas: só admin
                         .requestMatchers("/usuarios/**", "/empresa/**").hasRole("ADMIN")
@@ -57,7 +61,7 @@ public class SecurityConfiguration {
                         // atendimentos: recepcionista e profissional
                         .requestMatchers("/atendimento/**").hasAnyRole("RECEPCIONISTA", "PROFISSIONAL")
 
-                                .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore( jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

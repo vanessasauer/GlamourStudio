@@ -2,7 +2,9 @@ package com.example.glamourstudio.application.DTOs;
 
 import com.example.glamourstudio.domain.entities.Equipe;
 
-public record EquipeResponse(Long id, String nome, String descricao, EnumStatusEquipe statusEquipe) {
+import java.util.List;
+
+public record EquipeResponse(Long id, String nome, String descricao, EnumStatusEquipe statusEquipe, List<UsuarioResponse> profissionais) {
 
     public EquipeResponse(Equipe equipeEntidade){
 
@@ -10,7 +12,11 @@ public record EquipeResponse(Long id, String nome, String descricao, EnumStatusE
                 equipeEntidade.getId(),
                 equipeEntidade.getNome(),
                 equipeEntidade.getDescricao(),
-                equipeEntidade.getStatusEquipe()
+                equipeEntidade.getStatusEquipe(),
+                equipeEntidade.getProfissionais()
+                        .stream()
+                        .map(UsuarioResponse::new)
+                        .toList()
         );
     }
 }

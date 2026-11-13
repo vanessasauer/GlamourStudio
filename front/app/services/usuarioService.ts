@@ -75,3 +75,20 @@ export async function  salvarUsuario (usuario:Usuario): Promise<number>{
 export async function buscarUsuarioLogado() : Promise<Usuario>{
     return (await api.get<Usuario>('/usuarios/buscarusuariologado')).data
 }
+
+// coloca um usuário (profissional) dentro de uma equipe
+export async function adicionarUsuarioNaEquipe(usuarioId:number, equipeId:number) : Promise<boolean> {
+
+    try {
+
+        await api.patch('/usuarios/'+usuarioId+'/equipe', {equipe_id: equipeId});
+
+        return true;
+
+    } catch (error) {
+
+        return false;
+
+    }
+
+}
