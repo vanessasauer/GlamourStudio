@@ -1,9 +1,10 @@
 "use client"
 import { atualizarCliente, salvarCliente } from "@/app/services/clienteService";
+import { buscarDdd } from "@/app/services/dddService";
 import { Cliente, ClienteFormProps } from "@/app/types/cliente";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ClientesForm({clienteExistente}:ClienteFormProps) {
     const router = useRouter();
@@ -12,6 +13,35 @@ const  [cliente, setCliente] = useState<Cliente>(
     clienteExistente ||
     new Cliente(null,"","","","","ATIVO")
 );
+
+// mensagem mostrada embaixo do telefone (ex.: "DDD 11 – SP")
+const [infoDdd, setInfoDdd] = useState("");
+const [dddValido, setDddValido] = useState(true);
+
+// os 2 primeiros números do telefone
+const ddd = (cliente.telefone ?? "").replace(/\D/g, "").slice(0, 2);
+
+// só consulta quando o DDD muda, e não a cada número digitado
+useEffect(() => {
+
+    if (ddd.length < 2) {
+        setInfoDdd("");
+        return;
+    }
+
+    buscarDdd(ddd).then((resposta) => {
+
+        if (resposta) {
+            setInfoDdd("DDD " + ddd + " – " + resposta.estado);
+            setDddValido(true);
+        } else {
+            setInfoDdd("DDD " + ddd + " inválido");
+            setDddValido(false);
+        }
+
+    });
+
+}, [ddd]);
 
 const handlerChange = ( campo : 'nome' | 'dataNascimento' | 'email' | 'telefone', valor:string) =>{
     setCliente(
@@ -134,6 +164,12 @@ const handlerSalvar = async (formdata : FormData) =>{
                         className="w-full px-4 py-2.5 bg-[#FAF7F2] border border-[#D8CBBB] rounded-xl text-[#4F463D] placeholder:text-[#B8ADA2] focus:outline-none focus:ring-2 focus:ring-[#D8CBBB] focus:border-[#B9A58D] transition-all duration-200 shadow-inner"
                     >
                     </input>
+
+                    {infoDdd && (
+                        <p className={`text-xs ${dddValido ? "text-[#8A7D70]" : "text-red-600"}`}>
+                            {infoDdd}
+                        </p>
+                    )}
 
                 </div>
 

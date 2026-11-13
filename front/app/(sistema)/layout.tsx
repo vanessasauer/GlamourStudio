@@ -1,11 +1,14 @@
 "use client"
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+
+// menu e cabeçalho dependem do cookie do usuário, que só existe no navegador
+const Sidebar = dynamic(() => import("../components/Sidebar"), { ssr: false });
+const Header = dynamic(() => import("../components/Header"), { ssr: false });
 
 export default function SistemaLayout({children}){
 
