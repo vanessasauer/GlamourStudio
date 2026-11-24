@@ -2,6 +2,8 @@ package com.example.glamourstudio.application.services;
 
 import com.example.glamourstudio.application.DTOs.*;
 import com.example.glamourstudio.domain.entities.Atendimento;
+import com.example.glamourstudio.domain.entities.Cliente;
+import com.example.glamourstudio.domain.entities.Servico;
 import com.example.glamourstudio.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,30 +71,34 @@ public class AtendimentoService {
 
 
     public AtendimentoResponse salvarAtendimento(AtendimentoRequest atendimento, Long id) {
-        validarProfissional(atendimento.profissionalId());
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        validarProfissional(atendimento.profissionalId(), usuarioLogado.empresa_id());
 
         //Novo Atendimento
         if(id == 0L) {
             Atendimento atendimentoBanco = new Atendimento(atendimento);
 
-            atendimentoBanco.setCliente(clienteRepository.findById(atendimento.clienteId()).orElse(null));
-            atendimentoBanco.setServico(servicoRepository.findById(atendimento.servicoId()).orElse(null));
+            atendimentoBanco.setCliente(buscarClienteDaEmpresa(atendimento.clienteId(), usuarioLogado.empresa_id()));
+            atendimentoBanco.setServico(buscarServicoDaEmpresa(atendimento.servicoId(), usuarioLogado.empresa_id()));
 
             // o atendimento fica com a empresa de quem está cadastrando
-            var usuarioLogado = usuarioService.getUsuarioLogado();
             atendimentoBanco.setEmpresa(empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null));
 
             atendimentoRepository.save(atendimentoBanco);
 
             return new AtendimentoResponse(atendimentoBanco);
         }else {
-            //Atendimento existente
-            Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
+            //Atendimento existente (só encontra se for da empresa do usuário logado)
+            Atendimento atendimentoBanco = atendimentoRepository
+                    .getAtendimentoByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                    .orElse(null);
             if(atendimentoBanco!= null ){
-                atendimentoBanco.setCliente(clienteRepository.findById(atendimento.clienteId()).orElse(null));                atendimentoBanco.setProfissional(atendimento.profissional());
+                atendimentoBanco.setCliente(buscarClienteDaEmpresa(atendimento.clienteId(), usuarioLogado.empresa_id()));
+                atendimentoBanco.setProfissional(atendimento.profissional());
                 atendimentoBanco.setProfissionalId(atendimento.profissionalId());
                 atendimentoBanco.setDataHora(atendimento.dataHora());
-                atendimentoBanco.setServico(servicoRepository.findById(atendimento.servicoId()).orElse(null));                atendimentoBanco.setValor(atendimento.valor());
+                atendimentoBanco.setServico(buscarServicoDaEmpresa(atendimento.servicoId(), usuarioLogado.empresa_id()));
+                atendimentoBanco.setValor(atendimento.valor());
                 atendimentoRepository.save(atendimentoBanco);
                 return  new AtendimentoResponse(atendimentoBanco);
             }
@@ -102,17 +108,37 @@ public class AtendimentoService {
         return null;
     }
 
-    // Sem relação no banco, então confere aqui se o profissional informado existe.
-    private void validarProfissional(Long profissionalId) {
-        if (profissionalId != null && !usuarioRepository.existsById(profissionalId)) {
+    // Sem relação no banco, então confere aqui se o profissional informado existe
+    // e se ele é da mesma empresa do usuário logado.
+    private void validarProfissional(Long profissionalId, Long empresaId) {
+        if (profissionalId != null && !usuarioRepository.existsUsuarioByIdAndEmpresa_Id(profissionalId, empresaId)) {
             throw new RuntimeException("Profissional não encontrado!");
         }
     }
 
 
+    // O cliente do atendimento precisa ser da mesma empresa do usuário logado.
+    private Cliente buscarClienteDaEmpresa(Long clienteId, Long empresaId) {
+        return clienteRepository
+                .getClienteByIdAndEmpresa_Id(clienteId, empresaId)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+    }
+
+    // O serviço do atendimento precisa ser da mesma empresa do usuário logado ou ser um serviço padrão.
+    private Servico buscarServicoDaEmpresa(Long servicoId, Long empresaId) {
+        return servicoRepository.getServicoByIdAndEmpresa_Id(servicoId, empresaId)
+                .or(() -> servicoRepository.getServicoByIdAndEmpresaIsNull(servicoId))
+                .orElseThrow(() -> new RuntimeException("Serviço não encontrado!"));
+    }
+
+
     public AtendimentoResponse buscarPorId(Long id) {
 
-        var atendimento = atendimentoRepository.findById(id).orElse(null);
+        // só encontra se o atendimento for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        var atendimento = atendimentoRepository
+                .getAtendimentoByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if (atendimento == null) {
             return null;
         }
@@ -122,7 +148,11 @@ public class AtendimentoService {
 
     public boolean atualizarStatus(EnumStatusAtendimento statusAtendimento, Long id) {
 
-        Atendimento atendimentoBanco = atendimentoRepository.findById(id).orElse(null);
+        // só encontra se o atendimento for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        Atendimento atendimentoBanco = atendimentoRepository
+                .getAtendimentoByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if(atendimentoBanco!= null ){
             atendimentoBanco.setStatusAtendimento(statusAtendimento);
             atendimentoRepository.save(atendimentoBanco);

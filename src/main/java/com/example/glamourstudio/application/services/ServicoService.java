@@ -87,11 +87,14 @@ public class ServicoService {
 
             return new ServicoResponse(servicoBanco);
         }else {
-            //Serviço existente
-            Servico servicoBanco = servicoRepository.findById(id).orElse(null);
+            //Serviço existente: só encontra se for da empresa do usuário logado
+            // (serviço padrão, sem empresa, não é encontrado aqui, então não pode ser editado)
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            Servico servicoBanco = servicoRepository
+                    .getServicoByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                    .orElse(null);
 
-            // serviço padrão (sem empresa) não pode ser editado pela empresa
-            if(servicoBanco!= null && servicoBanco.getEmpresa() != null){
+            if(servicoBanco!= null){
                 servicoBanco.setNome(servico.nome());
                 servicoBanco.setDescricao(servico.descricao());
                 servicoBanco.setValor(servico.valor());
@@ -105,9 +108,18 @@ public class ServicoService {
         return null;
     }
 
+    // Procura primeiro um serviço da empresa; se não achar, procura um serviço padrão.
+    private Servico buscarServicoDaEmpresaOuPadrao(Long id, Long empresaId) {
+        return servicoRepository.getServicoByIdAndEmpresa_Id(id, empresaId)
+                .or(() -> servicoRepository.getServicoByIdAndEmpresaIsNull(id))
+                .orElse(null);
+    }
+
     public ServicoResponse buscarPorId(Long id) {
 
-        var servico = servicoRepository.findById(id).orElse(null);
+        // só encontra se o serviço for da empresa do usuário logado ou for padrão
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        var servico = buscarServicoDaEmpresaOuPadrao(id, usuarioLogado.empresa_id());
         if (servico == null) {
             return null;
         }
@@ -117,7 +129,9 @@ public class ServicoService {
 
     public boolean atualizarStatus(EnumStatusServico statusServico, Long id) {
 
-        Servico servicoBanco = servicoRepository.findById(id).orElse(null);
+        // só encontra se o serviço for da empresa do usuário logado ou for padrão
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        Servico servicoBanco = buscarServicoDaEmpresaOuPadrao(id, usuarioLogado.empresa_id());
         if(servicoBanco == null){
             return false;
         }
@@ -125,7 +139,6 @@ public class ServicoService {
         // serviço padrão: ativa ou desativa só para a empresa de quem está logado
         if(servicoBanco.getEmpresa() == null){
 
-            var usuarioLogado = usuarioService.getUsuarioLogado();
             Empresa empresa = empresaRepository.findById(usuarioLogado.empresa_id()).orElse(null);
             if(empresa == null){
                 return false;

@@ -54,8 +54,11 @@ public class ClienteService {
 
             return new ClienteResponse(clienteBanco);
         }else {
-            //Cliente existente
-            Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
+            //Cliente existente (só encontra se for da empresa do usuário logado)
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            Cliente clienteBanco = clienteRepository
+                    .getClienteByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                    .orElse(null);
             if(clienteBanco!= null ){
                 clienteBanco.setNome(cliente.nome());
                 clienteBanco.setDataNascimento(cliente.dataNascimento());
@@ -72,7 +75,11 @@ public class ClienteService {
 
     public ClienteResponse buscarPorId(Long id) {
 
-        var cliente = clienteRepository.findById(id).orElse(null);
+        // só encontra se o cliente for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        var cliente = clienteRepository
+                .getClienteByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if (cliente == null) {
             return null;
         }
@@ -82,7 +89,11 @@ public class ClienteService {
 
     public boolean atualizarStatus(EnumStatusCliente statusCliente, Long id) {
 
-        Cliente clienteBanco = clienteRepository.findById(id).orElse(null);
+        // só encontra se o cliente for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        Cliente clienteBanco = clienteRepository
+                .getClienteByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if(clienteBanco!= null ){
             clienteBanco.setStatusCliente(statusCliente);
             clienteRepository.save(clienteBanco);

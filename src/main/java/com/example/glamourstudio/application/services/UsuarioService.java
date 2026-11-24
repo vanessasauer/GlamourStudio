@@ -130,8 +130,14 @@ public class UsuarioService {
 
     public boolean adicionarUsuarioNaEquipe(Long id, AdicionarUsuarioEquipeRequest equipeRequest) {
 
-        Usuario usuarioBanco = usuarioRepository.findById(id).orElse(null);
-        Equipe equipeBanco = equipeRepository.findById(equipeRequest.equipe_id()).orElse(null);
+        // o profissional e a equipe precisam ser da empresa do usuário logado
+        var usuarioLogado = getUsuarioLogado();
+        Usuario usuarioBanco = usuarioRepository
+                .getUsuarioByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
+        Equipe equipeBanco = equipeRepository
+                .getEquipeByIdAndEmpresa_Id(equipeRequest.equipe_id(), usuarioLogado.empresa_id())
+                .orElse(null);
         if(usuarioBanco!= null && equipeBanco!= null) {
 
             var equipe =  usuarioBanco.getEquipes().stream()
@@ -164,6 +170,6 @@ public class UsuarioService {
             throw new RuntimeException("Erro ao buscar usuario logado!");
 
         }
-    } 
+    }
 
 }

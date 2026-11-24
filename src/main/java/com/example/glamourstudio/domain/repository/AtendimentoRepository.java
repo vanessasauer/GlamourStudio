@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {
@@ -15,4 +16,8 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
     List<Atendimento> findByProfissionalIdAndDataHoraBetweenOrderByDataHoraAsc(Long profissionalId, LocalDateTime inicio, LocalDateTime fim);
 
     List<Atendimento> getAtendimentosByEmpresa_Id(Long empresa);
+
+    // busca o atendimento pelo id, mas só se ele for da empresa informada
+    // SELECT * FROM atendimento WHERE id = ? AND empresa_id = ?
+    Optional<Atendimento> getAtendimentoByIdAndEmpresa_Id(Long id, Long empresaId);
 }

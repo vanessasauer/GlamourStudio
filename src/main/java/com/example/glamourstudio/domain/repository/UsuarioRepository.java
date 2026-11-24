@@ -17,4 +17,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     List<Usuario> getUsuariosByEmpresa_Id(Long empresa); // faz um filtro pela empresa_id.
 
+    // busca o usuário pelo id, mas só se ele for da empresa informada
+    // SELECT * FROM usuario WHERE id = ? AND empresa_id = ?
+    Optional<Usuario> getUsuarioByIdAndEmpresa_Id(Long id, Long empresaId);
+
+    // confere se existe um usuário com esse id dentro da empresa informada
+    boolean existsUsuarioByIdAndEmpresa_Id(Long id, Long empresaId);
+
 }

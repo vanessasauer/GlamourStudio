@@ -54,8 +54,11 @@ public class EquipeService {
 
             return new EquipeResponse(equipeBanco);
         }else {
-            //Equipe existente
-            Equipe equipeBanco = equipeRepository.findById(id).orElse(null);
+            //Equipe existente (só encontra se for da empresa do usuário logado)
+            var usuarioLogado = usuarioService.getUsuarioLogado();
+            Equipe equipeBanco = equipeRepository
+                    .getEquipeByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                    .orElse(null);
             if(equipeBanco!= null ){
                 equipeBanco.setNome(equipe.nome());
                 equipeBanco.setDescricao(equipe.descricao());
@@ -70,7 +73,11 @@ public class EquipeService {
 
     public EquipeResponse buscarPorId(Long id) {
 
-        var equipe = equipeRepository.findById(id).orElse(null);
+        // só encontra se a equipe for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        var equipe = equipeRepository
+                .getEquipeByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if (equipe == null) {
             return null;
         }
@@ -80,7 +87,11 @@ public class EquipeService {
 
     public boolean atualizarStatus(EnumStatusEquipe statusEquipe, Long id) {
 
-        Equipe equipeBanco = equipeRepository.findById(id).orElse(null);
+        // só encontra se a equipe for da empresa do usuário logado
+        var usuarioLogado = usuarioService.getUsuarioLogado();
+        Equipe equipeBanco = equipeRepository
+                .getEquipeByIdAndEmpresa_Id(id, usuarioLogado.empresa_id())
+                .orElse(null);
         if(equipeBanco!= null ){
             equipeBanco.setStatusEquipe(statusEquipe);
             equipeRepository.save(equipeBanco);
