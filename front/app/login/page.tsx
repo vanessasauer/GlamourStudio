@@ -1,10 +1,9 @@
 'use client'
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { loginBack } from "../services/authService";
 import { useDispatch } from "react-redux";
 import { buscarUsuarioLogado } from "../services/usuarioService";
-import { login } from "../redux/slices/authSlice";
+import { definirToken, login } from "../redux/slices/authSlice";
 
 
 
@@ -21,7 +20,10 @@ export default function Login(){
     var loginResposta = await loginBack(emailTela,senhaTela);
 
     if(loginResposta != null){
-        Cookies.set('token',loginResposta.token,{secure: true, expires: 7});
+        // 1º guarda o token no Redux, para a próxima chamada já ir com ele no cabeçalho
+        dispatch(definirToken(loginResposta.token));
+
+        // 2º busca os dados do usuário logado
         var usuarioLogado = await buscarUsuarioLogado();
 
         dispatch(login(
