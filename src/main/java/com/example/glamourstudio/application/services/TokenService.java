@@ -12,6 +12,8 @@ import com.example.glamourstudio.domain.repository.TokenRepository;
 import com.example.glamourstudio.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -39,9 +41,18 @@ public class TokenService {
     private TokenRepository tokenRepository;
 
 
+    // Quando o backend termina de iniciar, apaga os tokens antigos da tabela.
+    // Assim, reiniciar o servidor invalida todos os logins anteriores:
+    // o verificarToken não encontra mais o token no banco e o JwtFilter responde 401.
+    @EventListener(ApplicationReadyEvent.class)
+    public void limparTokensAoIniciar() {
+        tokenRepository.deleteAll();
+    }
+
+
     public String gerarToken(LoginRequest loginRequestDto) {
 
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(secret);
 
         var usuario = usuarioRepository.findAll()
                 .stream().filter( u-> u.getEmail().equals(loginRequestDto.email()))
@@ -49,15 +60,15 @@ public class TokenService {
 
 
         String token = JWT.create()
-                    .withIssuer(emissor)
-                    .withSubject(loginRequestDto.email())
-                    .withExpiresAt(this.gerarDataExpiracao())
-                    .sign(algorithm);
+                .withIssuer(emissor)
+                .withSubject(loginRequestDto.email())
+                .withExpiresAt(this.gerarDataExpiracao())
+                .sign(algorithm);
 
         tokenRepository.save(new Token(token,usuario));
 
-            return token;
-        }
+        return token;
+    }
 
     public UsuarioLogado verificarToken(String token) throws JWTVerificationException {
         Algorithm algorithm = Algorithm.HMAC256(secret);
